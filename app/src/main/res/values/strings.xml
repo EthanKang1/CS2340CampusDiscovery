@@ -6,4 +6,12 @@
         <item>Teacher</item>
         <item>Organizer</item>
     </string-array>
+
+    <string-array name="futureEvents">
+        <item>Event 1</item>
+        <item>Event 2</item>
+        <item>Event 3</item>
+        <item>Event 4</item>
+    </string-array>
 </resources>
+
