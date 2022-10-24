@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -28,7 +29,6 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         String msg = adapterView.getItemAtPosition(i).toString();
-        Toast.makeText(adapterView.getContext(), msg, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -38,6 +38,11 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
 
     public void sendMessage(View view) {
         Intent intent = new Intent(this, EventActivity.class);
+        EditText name = findViewById(R.id.username);
+        if (name.getText().toString().trim().matches("")) {
+            Toast.makeText(this, "Please provide a username", Toast.LENGTH_SHORT).show();
+            return;
+        }
         startActivity(intent);
     }
 }
