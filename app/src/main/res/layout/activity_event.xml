@@ -30,7 +30,6 @@
         android:background="@drawable/back"
         android:fontFamily="@font/roboto_bold"
         android:text="Events"
-        android:background="@drawable/back"
         android:textAlignment="center"
         android:textColor="@color/tech_gold"
         android:textSize="60sp"
