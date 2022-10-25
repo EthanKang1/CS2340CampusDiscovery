@@ -38,11 +38,17 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
 
     public void sendMessage(View view) {
         Intent intent = new Intent(this, EventActivity.class);
-        EditText name = findViewById(R.id.username);
-        if (name.getText().toString().trim().matches("")) {
+
+        EditText userNameText = findViewById(R.id.userName);
+        Spinner userTypeSpinner = (Spinner) findViewById(R.id.userType);
+
+        if (userNameText.getText().toString().trim().matches("")) {
             Toast.makeText(this, "Please provide a username", Toast.LENGTH_SHORT).show();
             return;
         }
+
+        intent.putExtra("userName", userNameText.getText().toString());
+        intent.putExtra("userType", userTypeSpinner.getSelectedItem().toString());
         startActivity(intent);
     }
 }
