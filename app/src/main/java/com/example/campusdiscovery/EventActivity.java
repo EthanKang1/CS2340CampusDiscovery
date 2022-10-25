@@ -14,12 +14,15 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class EventActivity extends AppCompatActivity {
 
     private String userName;
     private String userType;
 
-    private Events eventList;
+    private List<Event> eventList = new ArrayList<Event>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +34,10 @@ public class EventActivity extends AppCompatActivity {
             this.setUserName(extras.getString("userName"));
             this.setUserType(extras.getString("userType"));
         }
+
+        this.loadEventsPref();
+
+        System.out.println(this.eventList);
 
     }
 
@@ -46,47 +53,43 @@ public class EventActivity extends AppCompatActivity {
                 @Override
                 public void onActivityResult(ActivityResult result) {
                     if (result.getResultCode() == Activity.RESULT_OK) {
-                        // Here, no request code
                         Intent data = result.getData();
-                        System.out.println("here");
+                        String eventTitle = data.getStringExtra("eventTitle");
+                        String eventDescription = data.getStringExtra("eventDescription");
+                        String eventLocation = data.getStringExtra("eventLocation");
+                        String eventTime = data.getStringExtra("eventTime");
+
+                        Event newEvent = new Event(eventTitle);
+                        addEvent(newEvent);
+
                     }
                 }
             });
 
+    private void addEvent(Event event) {
+        this.eventList.add(event);
+        this.updateEventsPref();
+        System.out.println("event added");
+    }
 
+    private void updateEventsPref() {
+        SharedPreferences sh = getSharedPreferences("EventsPref",MODE_PRIVATE);
+        SharedPreferences.Editor prefsEditor = sh.edit();
+        Gson gson = new Gson();
+        String menuJson = gson.toJson(this.eventList);
+        System.out.println(menuJson);
+        prefsEditor.putString("events", menuJson);
+        prefsEditor.commit();
+    }
 
-//    public void printEvents(View view) {
-//        System.out.println(this.eventList.toJson());
-//    }
-//
-//    public void addEvents(View view) {
-//        Event newEvent = new Event("someting");
-//        this.addEvent(newEvent);
-//    }
+    private void loadEventsPref() {
+        SharedPreferences sh = getSharedPreferences("EventsPref", MODE_APPEND);
+        String eventsPref = sh.getString("events", "");
 
-//    // should only be used on initialization
-//    private void getEventsPref() {
-//        SharedPreferences sh = getSharedPreferences("EventsPref", MODE_APPEND);
-//        String eventsPref = sh.getString("events", "");
-//
-//        Gson gson = new Gson();
-//        Events obj = gson.fromJson(eventsPref, Events.class);
-//        setEventList(obj);
-//    }
+        Gson gson = new Gson();
+        this.eventList = gson.fromJson(eventsPref, ArrayList.class);
 
-//    private void clearEventsPref() {
-//        SharedPreferences sh = getSharedPreferences("EventsPref", MODE_APPEND);
-//        SharedPreferences.Editor prefsEditor = sh.edit();
-//        prefsEditor.clear();
-//        prefsEditor.commit();
-//    }
-//
-//    private void updateEventsPref() {
-//        SharedPreferences sh = getSharedPreferences("EventsPref",MODE_PRIVATE);
-//        SharedPreferences.Editor prefsEditor = sh.edit();
-//        prefsEditor.putString("events", this.eventList.toJson());
-//        prefsEditor.commit();
-//    }
+    }
 
     private void setUserName(String userName) {
         this.userName = userName;
@@ -94,12 +97,5 @@ public class EventActivity extends AppCompatActivity {
     private void setUserType(String userType) {
         this.userType = userType;
     }
-    private void setEventList(Events eventList) { this.eventList = eventList; }
-
-//    private void addEvent(Event event) {
-//        this.eventList.addEvent(event);
-//        this.updateEventsPref();
-//    }
-
 
 }

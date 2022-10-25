@@ -28,11 +28,11 @@
         android:text="Create Event"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/timeEditText"
+        app:layout_constraintTop_toBottomOf="@+id/eventTimeEditText"
         app:layout_constraintVertical_bias="1.0" />
 
     <EditText
-        android:id="@+id/titleEditText"
+        android:id="@+id/eventTitleEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="101dp"
@@ -42,7 +42,7 @@
         android:ems="10"
         android:hint="Event Title"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/descriptionEditText"
+        app:layout_constraintBottom_toTopOf="@+id/eventDescriptionEditText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -50,7 +50,7 @@
         app:layout_constraintVertical_bias="0.64" />
 
     <EditText
-        android:id="@+id/locationEditText"
+        android:id="@+id/eventLocationEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="100dp"
@@ -60,14 +60,14 @@
         android:ems="10"
         android:hint="Event Location"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/timeEditText"
+        app:layout_constraintBottom_toTopOf="@+id/eventTimeEditText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/descriptionEditText" />
+        app:layout_constraintTop_toBottomOf="@+id/eventDescriptionEditText" />
 
     <EditText
-        android:id="@+id/timeEditText"
+        android:id="@+id/eventTimeEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="100dp"
@@ -80,7 +80,7 @@
         app:layout_constraintBottom_toTopOf="@+id/button2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/locationEditText" />
+        app:layout_constraintTop_toBottomOf="@+id/eventLocationEditText" />
 
     <TextView
         android:id="@+id/textView6"
@@ -94,7 +94,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/descriptionEditText"
+        android:id="@+id/eventDescriptionEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="100dp"
@@ -105,10 +105,10 @@
         android:gravity="start|top"
         android:hint="Event Description"
         android:inputType="textMultiLine"
-        app:layout_constraintBottom_toTopOf="@+id/locationEditText"
+        app:layout_constraintBottom_toTopOf="@+id/eventLocationEditText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titleEditText" />
+        app:layout_constraintTop_toBottomOf="@+id/eventTitleEditText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

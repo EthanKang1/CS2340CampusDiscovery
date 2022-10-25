@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.Spinner;
 
 public class AddEventActivity extends AppCompatActivity {
 
@@ -20,10 +22,17 @@ public class AddEventActivity extends AppCompatActivity {
     }
 
     public void submitClick(View view) {
+        EditText eventTitleText = findViewById(R.id.eventTitleEditText);
+        EditText eventDescriptionText = findViewById(R.id.eventDescriptionEditText);
+        EditText eventLocationText = findViewById(R.id.eventLocationEditText);
+        EditText eventTimeText = findViewById(R.id.eventTimeEditText);
+
         Intent data = new Intent();
-        String text = "Result to be returned....";
-        data.setData(Uri.parse(text));
-        setResult(RESULT_OK, data);
+        data.putExtra("eventTitle", eventTitleText.getText().toString());
+        data.putExtra("eventDescription", eventDescriptionText.getText().toString());
+        data.putExtra("eventLocation", eventLocationText.getText().toString());
+        data.putExtra("eventTime", eventTimeText.getText().toString());
+        setResult(RESULT_OK,data);
         finish();
     }
 }
