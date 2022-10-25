@@ -1,5 +1,6 @@
 package com.example.campusdiscovery;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -7,6 +8,10 @@ import android.view.View;
 import android.widget.Toast;
 import com.google.gson.Gson;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class EventActivity extends AppCompatActivity {
@@ -30,9 +35,25 @@ public class EventActivity extends AppCompatActivity {
     }
 
     public void openAddEventActivity(View view) {
+
         Intent intent = new Intent(this, AddEventActivity.class);
-        startActivity(intent);
+        someActivityResultLauncher.launch(intent);
     }
+
+    ActivityResultLauncher<Intent> someActivityResultLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        // Here, no request code
+                        Intent data = result.getData();
+                        System.out.println("here");
+                    }
+                }
+            });
+
+
 
 //    public void printEvents(View view) {
 //        System.out.println(this.eventList.toJson());
