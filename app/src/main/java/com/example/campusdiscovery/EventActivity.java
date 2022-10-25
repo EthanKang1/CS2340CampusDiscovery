@@ -1,12 +1,21 @@
 package com.example.campusdiscovery;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -14,6 +23,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +33,8 @@ public class EventActivity extends AppCompatActivity {
     private String userType;
 
     private List<Event> eventList = new ArrayList<Event>();
+
+    EventsAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +49,9 @@ public class EventActivity extends AppCompatActivity {
 
         this.loadEventsPref();
 
-        System.out.println(this.eventList);
+        this.adapter = new EventsAdapter(this, this.eventList);
+        ListView listView = (ListView) findViewById(R.id.lvItems);
+        listView.setAdapter(adapter);
 
     }
 
@@ -59,7 +73,7 @@ public class EventActivity extends AppCompatActivity {
                         String eventLocation = data.getStringExtra("eventLocation");
                         String eventTime = data.getStringExtra("eventTime");
 
-                        Event newEvent = new Event(eventTitle);
+                        Event newEvent = new Event(eventTitle, eventDescription, eventLocation, eventTime, getUserName());
                         addEvent(newEvent);
 
                     }
@@ -69,6 +83,7 @@ public class EventActivity extends AppCompatActivity {
     private void addEvent(Event event) {
         this.eventList.add(event);
         this.updateEventsPref();
+        adapter.notifyDataSetChanged();
         System.out.println("event added");
     }
 
@@ -87,7 +102,12 @@ public class EventActivity extends AppCompatActivity {
         String eventsPref = sh.getString("events", "");
 
         Gson gson = new Gson();
-        this.eventList = gson.fromJson(eventsPref, ArrayList.class);
+        Type eventListType = new TypeToken<List<Event>>() {}.getType();
+        if (eventsPref == "") {
+            this.eventList = new ArrayList<Event>();
+        } else {
+            this.eventList = gson.fromJson(eventsPref, eventListType);
+        }
 
     }
 
@@ -97,5 +117,8 @@ public class EventActivity extends AppCompatActivity {
     private void setUserType(String userType) {
         this.userType = userType;
     }
+
+    private String getUserName() { return this.userName; }
+    private String getUserType() { return this.userType; }
 
 }
