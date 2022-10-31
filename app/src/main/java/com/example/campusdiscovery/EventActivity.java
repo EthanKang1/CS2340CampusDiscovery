@@ -5,11 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Adapter;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -30,7 +27,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EventActivity extends AppCompatActivity{
+public class EventActivity extends AppCompatActivity {
 
     private String userName;
     private String userType;
@@ -52,11 +49,9 @@ public class EventActivity extends AppCompatActivity{
 
         this.loadEventsPref();
 
-        this.adapter = new EventsAdapter(this, this.eventList, this.getUserName(), this.getUserType());
+        this.adapter = new EventsAdapter(this, this.eventList);
         ListView listView = (ListView) findViewById(R.id.lvItems);
         listView.setAdapter(adapter);
-
-
 
     }
 
