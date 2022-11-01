@@ -25,7 +25,6 @@ public class EditEventActivity extends AppCompatActivity {
         EditText eventDescriptionText = findViewById(R.id.newEventDescription);
         EditText eventLocationText = findViewById(R.id.newEventLocation);
         EditText eventTimeText = findViewById(R.id.newEventTime);
-
         Intent data = new Intent();
         data.putExtra("eventTitle", eventTitleText.getText().toString());
         data.putExtra("eventDescription", eventDescriptionText.getText().toString());

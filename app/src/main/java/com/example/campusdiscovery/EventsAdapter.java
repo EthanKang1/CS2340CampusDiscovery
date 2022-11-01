@@ -37,6 +37,7 @@ public class EventsAdapter extends ArrayAdapter<Event> {
         eventHost.setText("Hosted by " + event.getHost());
 
 
+
         return convertView;
 
     }

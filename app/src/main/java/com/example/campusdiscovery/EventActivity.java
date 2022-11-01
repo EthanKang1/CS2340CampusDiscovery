@@ -81,7 +81,6 @@ public class EventActivity extends AppCompatActivity {
 
                         Event newEvent = new Event(eventTitle, eventDescription, eventLocation, eventTime, getUserName());
                         addEvent(newEvent);
-
                     }
                 }
             });
@@ -92,6 +91,8 @@ public class EventActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
         System.out.println("event added");
     }
+
+
 
     private void updateEventsPref() {
         SharedPreferences sh = getSharedPreferences("EventsPref",MODE_PRIVATE);
