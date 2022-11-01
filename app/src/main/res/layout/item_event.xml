@@ -8,63 +8,86 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="200px">
+        android:layout_height="156dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/eventLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toTopOf="@+id/eventTime"
+            app:layout_constraintTop_toTopOf="@+id/eventTime">
 
             <TextView
                 android:id="@+id/eventName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
                 android:text="eventName"
                 android:textSize="24sp"
-                app:layout_constraintBottom_toTopOf="@+id/eventDescription"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/eventDescription"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="175dp"
+                android:layout_height="55dp"
+                android:layout_marginEnd="5dp"
                 android:layout_weight="1"
                 android:text="eventDescription"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/eventName" />
+                android:textAlignment="textEnd"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/eventHost" />
 
             <TextView
                 android:id="@+id/eventTime"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
+                android:layout_width="85dp"
+                android:layout_height="26dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="4dp"
                 android:gravity="center_vertical"
                 android:text="eventTime"
-                android:textAlignment="textEnd"
-                app:layout_constraintBottom_toTopOf="@id/eventDescription"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/eventLocation" />
 
             <TextView
                 android:id="@+id/eventHost"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="331dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="121dp"
                 android:text="eventHost"
+                android:textAlignment="textEnd"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/eventTime" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/eventLocation"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_marginStart="13dp"
-                android:layout_marginBottom="5dp"
+                android:layout_width="119dp"
+                android:layout_height="22dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="8dp"
                 android:gravity="bottom"
                 android:text="eventLocation"
-                app:layout_constraintBottom_toTopOf="@+id/eventDescription"
-                app:layout_constraintStart_toEndOf="@+id/eventName"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintEnd_toEndOf="@+id/eventName"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/eventDescription" />
+
+            <Button
+                android:id="@+id/button4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="44dp"
+                android:layout_marginTop="8dp"
+                android:onClick="editClick"
+                android:text="Edit"
+                app:layout_constraintStart_toEndOf="@+id/eventTime"
+                app:layout_constraintTop_toBottomOf="@+id/eventDescription" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
