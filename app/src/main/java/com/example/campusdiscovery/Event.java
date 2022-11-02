@@ -27,11 +27,21 @@ public class Event {
         return this.name;
     }
 
-    public String getDescription() { return this.description; }
+    public String getDescription() {
+        return this.description;
+    }
 
-    public String getLocation() { return this.location; }
+    public String getLocation() {
+        return this.location;
+    }
 
-    public String getTime() { return this.time; }
+    public String getTime() {
+        return this.time;
+    }
 
-    public String getHost() { return this.host; }
+    public String getHost() {
+        return this.host;
+    }
+
+
 }

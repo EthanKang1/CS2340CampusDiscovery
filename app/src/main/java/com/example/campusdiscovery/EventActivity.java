@@ -28,7 +28,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EventActivity extends AppCompatActivity implements BtnClickListener{
+public class EventActivity extends AppCompatActivity{
 
     private BtnClickListener mClickListener = null;
 
@@ -54,14 +54,31 @@ public class EventActivity extends AppCompatActivity implements BtnClickListener
 
         this.adapter = new EventsAdapter(this, this.eventList, new BtnClickListener() {
             @Override
-            public void onBtnClick(int position) {
-                deleteEvent(position);
+            public void onBtnClick(int position, String action) {
+                if (action == "delete") {
+                    deleteEvent(position);
+                } else if (action == "edit") {
+                    openEditEventActivity(position);
+                }
+
             }
         });
 
         ListView listView = (ListView) findViewById(R.id.lvItems);
         listView.setAdapter(adapter);
 
+    }
+
+    public void openEditEventActivity(int position){
+        System.out.println("Correct launch");
+        Event currentEvent = this.eventList.get(position);
+        Intent intent = new Intent(this, EditEventActivity.class);
+        intent.putExtra("eventTitle", currentEvent.getName());
+        intent.putExtra("eventDescription", currentEvent.getDescription());
+        intent.putExtra("eventLocation", currentEvent.getLocation());
+        intent.putExtra("eventTime", currentEvent.getTime());
+        intent.putExtra("eventPosition", position);
+        someActivityResultLauncher.launch(intent);
     }
 
     public void openAddEventActivity(View view) {
@@ -81,10 +98,15 @@ public class EventActivity extends AppCompatActivity implements BtnClickListener
                         String eventDescription = data.getStringExtra("eventDescription");
                         String eventLocation = data.getStringExtra("eventLocation");
                         String eventTime = data.getStringExtra("eventTime");
+                        String action = data.getStringExtra("action");
+                        int eventPosition = data.getIntExtra("eventPosition", -1);
 
                         Event newEvent = new Event(eventTitle, eventDescription, eventLocation, eventTime, getUserName());
-                        addEvent(newEvent);
-
+                        if (action.equals("add")) {
+                            addEvent(newEvent);
+                        } else if (action.equals("edit")) {
+                            editEvent(eventPosition, newEvent);
+                        }
                     }
                 }
             });
@@ -102,6 +124,13 @@ public class EventActivity extends AppCompatActivity implements BtnClickListener
             this.updateEventsPref();
             adapter.notifyDataSetChanged();
         }
+    }
+
+    private void editEvent(int position, Event event) {
+        this.eventList.set(position, event);
+        this.updateEventsPref();
+        adapter.notifyDataSetChanged();
+        System.out.println("event edited");
     }
 
 
@@ -140,9 +169,4 @@ public class EventActivity extends AppCompatActivity implements BtnClickListener
     private String getUserName() { return this.userName; }
     private String getUserType() { return this.userType; }
 
-
-    @Override
-    public void onBtnClick(int position) {
-        deleteEvent(position);
-    }
 }
