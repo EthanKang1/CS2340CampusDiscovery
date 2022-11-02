@@ -22,7 +22,6 @@ public class EventsAdapter extends ArrayAdapter<Event>{
         mClickListener = (BtnClickListener) listener;
     }
 
-
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         Event event = getItem(position);
@@ -31,7 +30,8 @@ public class EventsAdapter extends ArrayAdapter<Event>{
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_event, parent, false);
 
         }
-        Button delete = (Button) convertView.findViewById(R.id.delete);
+        Button deleteButton = (Button) convertView.findViewById(R.id.delete);
+        Button editButton = (Button) convertView.findViewById(R.id.edit);
         TextView eventName = (TextView) convertView.findViewById(R.id.eventName);
         eventName.setText(event.getName());
         TextView eventDescription = (TextView) convertView.findViewById(R.id.eventDescription);
@@ -42,14 +42,24 @@ public class EventsAdapter extends ArrayAdapter<Event>{
         eventLocation.setText(event.getLocation());
         TextView eventHost = (TextView) convertView.findViewById(R.id.eventHost);
         eventHost.setText("Hosted by " + event.getHost());
-        delete.setTag(position);
-        delete.setOnClickListener(new View.OnClickListener() {
+        deleteButton.setTag(position);
+        deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(mClickListener != null)
-                    mClickListener.onBtnClick((Integer) view.getTag());
+                    mClickListener.onBtnClick((Integer) view.getTag(), "delete");
             }
         });
+
+        editButton.setTag(position);
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(mClickListener != null)
+                    mClickListener.onBtnClick((Integer) view.getTag(), "edit");
+            }
+        });
+
 
         return convertView;
     }
