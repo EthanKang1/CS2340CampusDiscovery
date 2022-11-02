@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
@@ -27,7 +28,9 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EventActivity extends AppCompatActivity {
+public class EventActivity extends AppCompatActivity implements BtnClickListener{
+
+    private BtnClickListener mClickListener = null;
 
     private String userName;
     private String userType;
@@ -49,7 +52,13 @@ public class EventActivity extends AppCompatActivity {
 
         this.loadEventsPref();
 
-        this.adapter = new EventsAdapter(this, this.eventList);
+        this.adapter = new EventsAdapter(this, this.eventList, new BtnClickListener() {
+            @Override
+            public void onBtnClick(int position) {
+                deleteEvent(position);
+            }
+        });
+
         ListView listView = (ListView) findViewById(R.id.lvItems);
         listView.setAdapter(adapter);
 
@@ -87,6 +96,15 @@ public class EventActivity extends AppCompatActivity {
         System.out.println("event added");
     }
 
+    private void deleteEvent(int position) {
+        if (this.eventList.get(position).getHost().equals(this.userName) || this.userType.equals("Organizer")) {
+            this.eventList.remove(position);
+            this.updateEventsPref();
+            adapter.notifyDataSetChanged();
+        }
+    }
+
+
     private void updateEventsPref() {
         SharedPreferences sh = getSharedPreferences("EventsPref",MODE_PRIVATE);
         SharedPreferences.Editor prefsEditor = sh.edit();
@@ -96,6 +114,7 @@ public class EventActivity extends AppCompatActivity {
         prefsEditor.putString("events", menuJson);
         prefsEditor.commit();
     }
+
 
     private void loadEventsPref() {
         SharedPreferences sh = getSharedPreferences("EventsPref", MODE_APPEND);
@@ -121,4 +140,9 @@ public class EventActivity extends AppCompatActivity {
     private String getUserName() { return this.userName; }
     private String getUserType() { return this.userType; }
 
+
+    @Override
+    public void onBtnClick(int position) {
+        deleteEvent(position);
+    }
 }
