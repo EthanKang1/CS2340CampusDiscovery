@@ -83,7 +83,7 @@ public class EventActivity extends AppCompatActivity{
 
     public void openAddEventActivity(View view) {
 
-        Intent intent = new Intent(this, EventActivity.class);
+        Intent intent = new Intent(this, AddEventActivity.class);
         someActivityResultLauncher.launch(intent);
     }
 
