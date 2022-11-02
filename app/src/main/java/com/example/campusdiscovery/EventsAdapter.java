@@ -22,6 +22,8 @@ public class EventsAdapter extends ArrayAdapter<Event>{
         mClickListener = (BtnClickListener) listener;
     }
 
+
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         Event event = getItem(position);
@@ -59,7 +61,6 @@ public class EventsAdapter extends ArrayAdapter<Event>{
                     mClickListener.onBtnClick((Integer) view.getTag(), "edit");
             }
         });
-
 
         return convertView;
     }
