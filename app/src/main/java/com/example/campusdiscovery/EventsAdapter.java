@@ -34,6 +34,7 @@ public class EventsAdapter extends ArrayAdapter<Event>{
         }
         Button deleteButton = (Button) convertView.findViewById(R.id.delete);
         Button editButton = (Button) convertView.findViewById(R.id.edit);
+        Button viewButton = (Button) convertView.findViewById(R.id.view);
         TextView eventName = (TextView) convertView.findViewById(R.id.eventName);
         eventName.setText(event.getName());
         TextView eventDescription = (TextView) convertView.findViewById(R.id.eventDescription);
@@ -59,6 +60,15 @@ public class EventsAdapter extends ArrayAdapter<Event>{
             public void onClick(View view) {
                 if(mClickListener != null)
                     mClickListener.onBtnClick((Integer) view.getTag(), "edit");
+            }
+        });
+
+        viewButton.setTag(position);
+        viewButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(mClickListener != null)
+                    mClickListener.onBtnClick((Integer) view.getTag(), "view");
             }
         });
 

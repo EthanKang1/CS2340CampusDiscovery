@@ -102,6 +102,8 @@ public class EventActivity extends AppCompatActivity{
                     deleteEvent(position);
                 } else if (action == "edit") {
                     openEditEventActivity(position);
+                } else if (action == "view") {
+                    openViewEventActivity(position);
                 }
             }
         });
@@ -127,6 +129,18 @@ public class EventActivity extends AppCompatActivity{
 
         Intent intent = new Intent(this, AddEventActivity.class);
         eventActivityResultLauncher.launch(intent);
+    }
+
+    public void openViewEventActivity(int position) {
+        System.out.println("Correct launch");
+        Event currentEvent = this.eventList.get(position);
+        Intent intent = new Intent(this, ViewEventActivity.class);
+        intent.putExtra("eventTitle", currentEvent.getName());
+        intent.putExtra("eventDescription", currentEvent.getDescription());
+        intent.putExtra("eventLocation", currentEvent.getLocation());
+        intent.putExtra("eventTime", currentEvent.getTime());
+        intent.putExtra("eventPosition", position);
+        someActivityResultLauncher.launch(intent);
     }
 
     private void addEvent(Event event) {
