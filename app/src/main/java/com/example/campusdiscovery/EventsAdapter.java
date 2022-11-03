@@ -4,25 +4,35 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class EventsAdapter extends ArrayAdapter<Event>{
 
     private BtnClickListener mClickListener = null;
+    private SpinnerListener spinnerListener = null;
     List<Event> events;
+    private Context context;
+    private String username;
 
+    private final List<String> statuses = Arrays.asList("Will Attend", "Maybe", "Won't Attend", "I'm Your Nemesis");
 
-    public EventsAdapter(Context context, List<Event> events, BtnClickListener listener) {
+    public EventsAdapter(Context context, List<Event> events, BtnClickListener listener, SpinnerListener spinnerListener, String username) {
         super(context, 0, events);
+        this.context = context;
         mClickListener = (BtnClickListener) listener;
+        this.spinnerListener = (SpinnerListener) spinnerListener;
+        this.username = username;
     }
-
-
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -62,7 +72,36 @@ public class EventsAdapter extends ArrayAdapter<Event>{
             }
         });
 
+        // Status dropdown
+        Spinner statusSpinner = (Spinner) convertView.findViewById(R.id.statusSpinner);
+//        statusSpinner.setOnItemSelectedListener(this);
+        ArrayAdapter<String> statusAdapter = new ArrayAdapter<String>(this.context, android.R.layout.simple_spinner_item, this.statuses);
+        statusSpinner.setAdapter(statusAdapter);
+        statusSpinner.setSelection(event.getStatus(this.username));
+        statusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View arg1, int arg2, long arg3) {
+//                System.out.println(position);
+//                System.out.println(parent.getItemAtPosition(arg2).toString());
+                spinnerListener.onItemSelect(position, arg2);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+            }
+
+        });
+
         return convertView;
     }
+
+//    @Override
+//    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//        System.out.println(parent.getItemAtPosition(position).toString());
+//        System.out.println(this.context);
+////        this.spinnerListener.onItemSelect((Integer) view.getTag(), parent.getItemAtPosition(position).toString());
+//    }
+//    @Override
+//    public void onNothingSelected(AdapterView<?> parent) { }
 }
 
