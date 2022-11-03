@@ -22,8 +22,11 @@
                 android:id="@+id/eventName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
                 android:text="eventName"
                 android:textSize="24sp"
+                app:layout_constraintBottom_toTopOf="@+id/eventDescription"
+                app:layout_constraintEnd_toStartOf="@+id/eventLocation"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -35,6 +38,7 @@
                 android:text="eventDescription"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/eventHost"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/eventName"
                 app:layout_constraintVertical_bias="0.0" />
@@ -55,11 +59,13 @@
                 android:id="@+id/eventHost"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="49dp"
                 android:layout_marginEnd="100dp"
                 android:text="eventHost"
                 android:textAlignment="textEnd"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/eventTime" />
 
             <TextView
                 android:id="@+id/eventLocation"
@@ -74,7 +80,7 @@
 
             <Button
                 android:id="@+id/delete"
-                android:layout_width="75dp"
+                android:layout_width="80dp"
                 android:layout_height="48dp"
                 android:text="Delete"
                 android:textSize="10sp"
@@ -85,10 +91,12 @@
 
             <Button
                 android:id="@+id/edit"
-                android:layout_width="75dp"
+                android:layout_width="80dp"
                 android:layout_height="48dp"
+                android:layout_marginBottom="5dp"
                 android:text="Edit"
                 android:textSize="10sp"
+                app:layout_constraintBottom_toTopOf="@+id/delete"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/eventTime"
                 app:layout_constraintTop_toTopOf="parent" />
