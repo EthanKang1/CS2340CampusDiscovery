@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -102,12 +103,19 @@ public class EventActivity extends AppCompatActivity{
                     deleteEvent(position);
                 } else if (action == "edit") {
                     openEditEventActivity(position);
-                } else if (action == "view") {
-                    openViewEventActivity(position);
                 }
             }
         });
-        eventListView.setAdapter(this.eventsAdapter);
+        this.eventListView.setAdapter(this.eventsAdapter);
+        this.eventListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
+            @Override
+            public void onItemClick(AdapterView<?> adapter, View v, int position,
+                                    long arg3)
+            {
+                openViewEventActivity(position);
+            }
+        });
 
         // loads first event page
         this.loadEventPage();
