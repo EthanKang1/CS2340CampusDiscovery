@@ -1,20 +1,15 @@
 package com.example.campusdiscovery;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.ScrollView;
-import android.widget.TextView;
-import android.widget.Toast;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -23,6 +18,7 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.res.ResourcesCompat;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -32,27 +28,74 @@ public class EventActivity extends AppCompatActivity{
 
     private BtnClickListener mClickListener = null;
 
+    // current user information
     private String userName;
     private String userType;
 
-    private List<Event> eventList = new ArrayList<Event>();
+    // pagination variables and elements
+    private int noOfBtns;
+    private Button[] btns;
+    private LinearLayout paginationButtonLayout;
+    private ListView eventListView;
+    private EventsAdapter eventsAdapter;
+    private int currentPage = 0;
 
-    EventsAdapter adapter;
+    // event variables
+    private List<Event> eventList = new ArrayList<Event>();
+    private List<Event> pageEventList = new ArrayList<Event>();
+
+    // constants
+    private int NUM_ITEMS_PAGE = 10;
+    private LinearLayout.LayoutParams paginationButtonLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+    private final ActivityResultLauncher<Intent> eventActivityResultLauncher = registerForActivityResult(
+        new ActivityResultContracts.StartActivityForResult(),
+        new ActivityResultCallback<ActivityResult>() {
+            @Override
+            public void onActivityResult(ActivityResult result) {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    Intent data = result.getData();
+                    String eventTitle = data.getStringExtra("eventTitle");
+                    String eventDescription = data.getStringExtra("eventDescription");
+                    String eventLocation = data.getStringExtra("eventLocation");
+                    String eventTime = data.getStringExtra("eventTime");
+                    String action = data.getStringExtra("action");
+                    int eventPosition = data.getIntExtra("eventPosition", -1);
+
+                    Event newEvent = new Event(eventTitle, eventDescription, eventLocation, eventTime, getUserName());
+                    if (action.equals("add")) {
+                        addEvent(newEvent);
+                    } else if (action.equals("edit")) {
+                        editEvent(eventPosition, newEvent);
+                    }
+                }
+            }
+        }
+    );
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event);
 
+        // stores visual element variables
+        this.eventListView = (ListView) findViewById(R.id.lvItems);
+        this.paginationButtonLayout = (LinearLayout) findViewById(R.id.btnLay);
+
+        // gets user data from login screen
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             this.setUserName(extras.getString("userName"));
             this.setUserType(extras.getString("userType"));
         }
 
+        // loads event data from storage
         this.loadEventsPref();
 
-        this.adapter = new EventsAdapter(this, this.eventList, new BtnClickListener() {
+        // creates event pagination button footer
+        initializeEventButtonFooter();
+
+        // initialize event adapter
+        this.eventsAdapter = new EventsAdapter(this, this.pageEventList, new BtnClickListener() {
             @Override
             public void onBtnClick(int position, String action) {
                 if (action == "delete") {
@@ -62,13 +105,12 @@ public class EventActivity extends AppCompatActivity{
                 } else if (action == "view") {
                     openViewEventActivity(position);
                 }
-
             }
         });
+        eventListView.setAdapter(this.eventsAdapter);
 
-        ListView listView = (ListView) findViewById(R.id.lvItems);
-        listView.setAdapter(adapter);
-
+        // loads first event page
+        this.loadEventPage();
     }
 
     public void openEditEventActivity(int position){
@@ -80,13 +122,13 @@ public class EventActivity extends AppCompatActivity{
         intent.putExtra("eventLocation", currentEvent.getLocation());
         intent.putExtra("eventTime", currentEvent.getTime());
         intent.putExtra("eventPosition", position);
-        someActivityResultLauncher.launch(intent);
+        eventActivityResultLauncher.launch(intent);
     }
 
     public void openAddEventActivity(View view) {
 
         Intent intent = new Intent(this, AddEventActivity.class);
-        someActivityResultLauncher.launch(intent);
+        eventActivityResultLauncher.launch(intent);
     }
 
     public void openViewEventActivity(int position) {
@@ -101,52 +143,34 @@ public class EventActivity extends AppCompatActivity{
         someActivityResultLauncher.launch(intent);
     }
 
-    ActivityResultLauncher<Intent> someActivityResultLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<ActivityResult>() {
-                @Override
-                public void onActivityResult(ActivityResult result) {
-                    if (result.getResultCode() == Activity.RESULT_OK) {
-                        Intent data = result.getData();
-                        String eventTitle = data.getStringExtra("eventTitle");
-                        String eventDescription = data.getStringExtra("eventDescription");
-                        String eventLocation = data.getStringExtra("eventLocation");
-                        String eventTime = data.getStringExtra("eventTime");
-                        String action = data.getStringExtra("action");
-                        int eventPosition = data.getIntExtra("eventPosition", -1);
-
-                        Event newEvent = new Event(eventTitle, eventDescription, eventLocation, eventTime, getUserName());
-                        if (action.equals("add")) {
-                            addEvent(newEvent);
-                        } else if (action.equals("edit")) {
-                            editEvent(eventPosition, newEvent);
-                        }
-                    }
-                }
-            });
-
     private void addEvent(Event event) {
         this.eventList.add(event);
         this.updateEventsPref();
-        adapter.notifyDataSetChanged();
+        this.eventsAdapter.notifyDataSetChanged();
         System.out.println("event added");
+
+        this.initializeEventButtonFooter();
+        this.loadEventPage(0);
     }
 
     private void deleteEvent(int position) {
         if (this.eventList.get(position).getHost().equals(this.userName) || this.userType.equals("Organizer")) {
             this.eventList.remove(position);
             this.updateEventsPref();
-            adapter.notifyDataSetChanged();
+            this.eventsAdapter.notifyDataSetChanged();
+
+            this.initializeEventButtonFooter();
+            this.loadEventPage();
         }
     }
 
     private void editEvent(int position, Event event) {
         this.eventList.set(position, event);
         this.updateEventsPref();
-        adapter.notifyDataSetChanged();
+        this.eventsAdapter.notifyDataSetChanged();
         System.out.println("event edited");
+        this.loadEventPage();
     }
-
 
     private void updateEventsPref() {
         SharedPreferences sh = getSharedPreferences("EventsPref",MODE_PRIVATE);
@@ -157,7 +181,6 @@ public class EventActivity extends AppCompatActivity{
         prefsEditor.putString("events", menuJson);
         prefsEditor.commit();
     }
-
 
     private void loadEventsPref() {
         SharedPreferences sh = getSharedPreferences("EventsPref", MODE_APPEND);
@@ -173,6 +196,62 @@ public class EventActivity extends AppCompatActivity{
 
     }
 
+    private void loadEventPage(int page)
+    {
+        this.currentPage = page;
+        this.pageEventList.clear();
+
+        for (int i = 0; i < NUM_ITEMS_PAGE ; i++)  {
+            if ((page * NUM_ITEMS_PAGE) + i < this.eventList.size()) {
+                this.pageEventList.add(this.eventList.get((page * NUM_ITEMS_PAGE) + i));
+            }
+        }
+
+        for(int i = 0;i < this.noOfBtns; i++)
+        {
+            if(i == page)
+            {
+                btns[page].setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.tech_gold, null));
+                btns[i].setTextColor(getResources().getColor(android.R.color.white));
+            }
+            else
+            {
+                btns[i].setBackgroundColor(getResources().getColor(android.R.color.transparent));
+                btns[i].setTextColor(getResources().getColor(android.R.color.black));
+            }
+        }
+
+        this.eventsAdapter.notifyDataSetChanged();
+    }
+
+    private void loadEventPage() {
+        this.loadEventPage(this.currentPage);
+    }
+
+    private void initializeEventButtonFooter()
+    {
+        this.noOfBtns = (int) Math.ceil((float) this.eventList.size() / NUM_ITEMS_PAGE);
+        this.btns = new Button[this.noOfBtns];
+
+        this.paginationButtonLayout.removeAllViews();
+
+        for(int i = 0; i < this.noOfBtns;i++) {
+            // create page button
+            this.btns[i] = new Button(this);
+            this.btns[i].setBackgroundColor(getResources().getColor(android.R.color.transparent));
+            this.btns[i].setText(String.valueOf(i + 1));
+            this.paginationButtonLayout.addView(btns[i], this.paginationButtonLayoutParams);
+
+            // create button click handler
+            final int j = i;
+            btns[j].setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    loadEventPage(j);
+                }
+            });
+        }
+    }
+
     private void setUserName(String userName) {
         this.userName = userName;
     }
@@ -182,5 +261,4 @@ public class EventActivity extends AppCompatActivity{
 
     private String getUserName() { return this.userName; }
     private String getUserType() { return this.userType; }
-
 }
