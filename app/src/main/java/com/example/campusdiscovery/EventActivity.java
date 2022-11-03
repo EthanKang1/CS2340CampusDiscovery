@@ -140,7 +140,7 @@ public class EventActivity extends AppCompatActivity{
         intent.putExtra("eventLocation", currentEvent.getLocation());
         intent.putExtra("eventTime", currentEvent.getTime());
         intent.putExtra("eventPosition", position);
-        someActivityResultLauncher.launch(intent);
+        eventActivityResultLauncher.launch(intent);
     }
 
     private void addEvent(Event event) {
