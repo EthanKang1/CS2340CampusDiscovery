@@ -36,7 +36,7 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:text="eventDescription"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/statusSpinner"
                 app:layout_constraintEnd_toEndOf="@id/eventTime"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/eventName"
@@ -58,13 +58,14 @@
             <TextView
                 android:id="@+id/eventHost"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:gravity="right"
                 android:text="eventHost"
                 android:textAlignment="textEnd"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@id/eventLocation"
-                app:layout_constraintStart_toEndOf="@+id/eventDescription" />
+                app:layout_constraintStart_toEndOf="@+id/statusSpinner"
+                app:layout_constraintTop_toTopOf="@+id/statusSpinner" />
 
             <TextView
                 android:id="@+id/eventTime"
@@ -100,6 +101,14 @@
                 app:layout_constraintBottom_toTopOf="@+id/delete"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <Spinner
+                android:id="@+id/statusSpinner"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:theme="@android:style/Theme.Holo.NoActionBar"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

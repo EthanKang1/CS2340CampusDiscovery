@@ -27,8 +27,6 @@ import java.util.List;
 
 public class EventActivity extends AppCompatActivity{
 
-    private BtnClickListener mClickListener = null;
-
     // current user information
     private String userName;
     private String userType;
@@ -105,7 +103,15 @@ public class EventActivity extends AppCompatActivity{
                     openEditEventActivity(position);
                 }
             }
-        });
+        }, new SpinnerListener() {
+            @Override
+            public void onItemSelect(int position, int status) {
+                System.out.println(position);
+                System.out.println(status);
+                editEventStatus(position, status);
+            }
+        }, getUserName());
+
         this.eventListView.setAdapter(this.eventsAdapter);
         this.eventListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
@@ -178,6 +184,12 @@ public class EventActivity extends AppCompatActivity{
         this.eventsAdapter.notifyDataSetChanged();
         System.out.println("event edited");
         this.loadEventPage();
+    }
+
+    private void editEventStatus(int position, int status) {
+        this.eventList.get(position).setStatus(getUserName(), status);
+        this.updateEventsPref();
+        System.out.println("status edited");
     }
 
     private void updateEventsPref() {
