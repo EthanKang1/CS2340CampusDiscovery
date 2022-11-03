@@ -35,9 +35,21 @@ public class EventActivity extends AppCompatActivity{
     private String userName;
     private String userType;
 
+    private int TOTAL_LIST_ITEMS;
+    private int NUM_ITEMS_PAGE = 10;
+
+    private int noOfBtns;
+    private Button[] btns;
+
     private List<Event> eventList = new ArrayList<Event>();
+    private List<Event> pageEventList = new ArrayList<Event>();
 
     EventsAdapter adapter;
+
+    private TextView title;
+    private ListView listView;
+
+    ArrayAdapter<Event> sd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,20 +64,30 @@ public class EventActivity extends AppCompatActivity{
 
         this.loadEventsPref();
 
-        this.adapter = new EventsAdapter(this, this.eventList, new BtnClickListener() {
-            @Override
-            public void onBtnClick(int position, String action) {
-                if (action == "delete") {
-                    deleteEvent(position);
-                } else if (action == "edit") {
-                    openEditEventActivity(position);
-                }
+        this.listView = (ListView) findViewById(R.id.lvItems);
 
-            }
-        });
+//        this.adapter = new EventsAdapter(this, this.eventList, new BtnClickListener() {
+//            @Override
+//            public void onBtnClick(int position, String action) {
+//                if (action == "delete") {
+//                    deleteEvent(position);
+//                } else if (action == "edit") {
+//                    openEditEventActivity(position);
+//                }
+//            }
+//        });
 
-        ListView listView = (ListView) findViewById(R.id.lvItems);
-        listView.setAdapter(adapter);
+
+        this.title    = (TextView)findViewById(R.id.title);
+
+        Btnfooter();
+
+        loadList(0);
+
+        CheckBtnBackGroud(0);
+
+//        ListView listView = (ListView) findViewById(R.id.lvItems);
+//        listView.setAdapter(adapter);
 
     }
 
@@ -153,8 +175,10 @@ public class EventActivity extends AppCompatActivity{
         Type eventListType = new TypeToken<List<Event>>() {}.getType();
         if (eventsPref == "") {
             this.eventList = new ArrayList<Event>();
+            this.TOTAL_LIST_ITEMS = 0;
         } else {
             this.eventList = gson.fromJson(eventsPref, eventListType);
+            this.TOTAL_LIST_ITEMS = this.eventList.size();
         }
 
     }
@@ -168,5 +192,93 @@ public class EventActivity extends AppCompatActivity{
 
     private String getUserName() { return this.userName; }
     private String getUserType() { return this.userType; }
+
+    /**
+     * Method for loading data in listview
+     * @param number
+     */
+    private void loadList(int number)
+    {
+        this.pageEventList = new ArrayList<Event>();
+
+        int start = number * NUM_ITEMS_PAGE;
+        for(int i=start;i<(start)+NUM_ITEMS_PAGE;i++)
+        {
+            if(i<this.eventList.size())
+            {
+                this.pageEventList.add(this.eventList.get(i));
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        this.adapter = new EventsAdapter(this, this.pageEventList, new BtnClickListener() {
+            @Override
+            public void onBtnClick(int position, String action) {
+                if (action == "delete") {
+                    deleteEvent(position);
+                } else if (action == "edit") {
+                    openEditEventActivity(position);
+                }
+            }
+        });
+        listView.setAdapter(this.adapter);
+    }
+
+    private void Btnfooter()
+    {
+        int val = TOTAL_LIST_ITEMS%NUM_ITEMS_PAGE;
+        val = val==0?0:1;
+        noOfBtns=TOTAL_LIST_ITEMS/NUM_ITEMS_PAGE+val;
+
+        LinearLayout ll = (LinearLayout)findViewById(R.id.btnLay);
+
+        btns = new Button[noOfBtns];
+
+        for(int i=0;i<noOfBtns;i++)
+        {
+            btns[i] =   new Button(this);
+            btns[i].setBackgroundColor(getResources().getColor(android.R.color.transparent));
+            btns[i].setText(""+(i+1));
+
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            ll.addView(btns[i], lp);
+
+            final int j = i;
+            btns[j].setOnClickListener(new View.OnClickListener() {
+
+                public void onClick(View v)
+                {
+                    loadList(j);
+                    CheckBtnBackGroud(j);
+                }
+            });
+        }
+
+    }
+
+    /**
+     * Method for Checking Button Backgrounds
+     */
+    private void CheckBtnBackGroud(int index)
+    {
+        title.setText("Page "+(index+1)+" of "+noOfBtns);
+        for(int i=0;i<noOfBtns;i++)
+        {
+            if(i==index)
+            {
+                btns[index].setBackgroundColor(getResources().getColor(android.R.color.holo_green_dark));
+                btns[i].setTextColor(getResources().getColor(android.R.color.white));
+            }
+            else
+            {
+                btns[i].setBackgroundColor(getResources().getColor(android.R.color.transparent));
+                btns[i].setTextColor(getResources().getColor(android.R.color.black));
+            }
+        }
+
+    }
 
 }
