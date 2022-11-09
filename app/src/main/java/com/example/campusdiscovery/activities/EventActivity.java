@@ -10,11 +10,11 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
-import com.example.campusdiscovery.BtnClickListener;
-import com.example.campusdiscovery.Event;
-import com.example.campusdiscovery.EventsAdapter;
+import com.example.campusdiscovery.interfaces.BtnClickListener;
+import com.example.campusdiscovery.models.Event;
+import com.example.campusdiscovery.adapters.EventsAdapter;
 import com.example.campusdiscovery.R;
-import com.example.campusdiscovery.SpinnerListener;
+import com.example.campusdiscovery.interfaces.SpinnerListener;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 

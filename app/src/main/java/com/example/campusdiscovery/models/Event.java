@@ -1,4 +1,4 @@
-package com.example.campusdiscovery;
+package com.example.campusdiscovery.models;
 
 import java.util.HashMap;
 import java.util.Map;
