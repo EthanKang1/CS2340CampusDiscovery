@@ -1,4 +1,4 @@
-package com.example.campusdiscovery;
+package com.example.campusdiscovery.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Spinner;
+
+import com.example.campusdiscovery.R;
 
 public class AddEventActivity extends AppCompatActivity {
 

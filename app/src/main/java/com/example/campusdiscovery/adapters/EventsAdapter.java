@@ -1,4 +1,4 @@
-package com.example.campusdiscovery;
+package com.example.campusdiscovery.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,12 +7,14 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.util.ArrayList;
+import com.example.campusdiscovery.interfaces.BtnClickListener;
+import com.example.campusdiscovery.models.Event;
+import com.example.campusdiscovery.R;
+import com.example.campusdiscovery.interfaces.SpinnerListener;
+
 import java.util.Arrays;
 import java.util.List;
 
