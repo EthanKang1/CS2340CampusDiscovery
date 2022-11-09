@@ -1,4 +1,4 @@
-package com.example.campusdiscovery;
+package com.example.campusdiscovery.activities;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -6,11 +6,15 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import com.example.campusdiscovery.BtnClickListener;
+import com.example.campusdiscovery.Event;
+import com.example.campusdiscovery.EventsAdapter;
+import com.example.campusdiscovery.R;
+import com.example.campusdiscovery.SpinnerListener;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
