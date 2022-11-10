@@ -13,16 +13,30 @@ import com.example.campusdiscovery.R;
 
 public class AddEventActivity extends AppCompatActivity {
 
+    /**
+     * Initializes the new activity.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_event);
     }
 
+    /**
+     * Ends the activity with no result following a back click.
+     * @param view Current view
+     */
     public void backClick(View view) {
         finish();
     }
 
+    /**
+     * Ends the activity with a successful result following the summit button being clicked.
+     * This captures the text in each EditText field and packages this in an intent which is then
+     * returned.
+     * @param view
+     */
     public void submitClick(View view) {
         EditText eventTitleText = findViewById(R.id.eventTitleEditText);
         EditText eventDescriptionText = findViewById(R.id.eventDescriptionEditText);

@@ -13,6 +13,11 @@ import com.example.campusdiscovery.R;
 
 public class ViewEventActivity extends AppCompatActivity {
 
+    /**
+     * Initializes the new activity.
+     * Captures and sets the existing fields to the corresponding event data.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +41,10 @@ public class ViewEventActivity extends AppCompatActivity {
         eventTimeText.setText(eventTime);
     }
 
+    /**
+     * Ends the activity with no result following a back click.
+     * @param view Current view
+     */
     public void backClick(View view) {
         finish();
     }
