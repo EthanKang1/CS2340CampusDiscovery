@@ -42,12 +42,15 @@ public class AddEventActivity extends AppCompatActivity {
         EditText eventDescriptionText = findViewById(R.id.eventDescriptionEditText);
         EditText eventLocationText = findViewById(R.id.eventLocationEditText);
         EditText eventTimeText = findViewById(R.id.eventTimeEditText);
+        EditText eventRSVPList = findViewById(R.id.RSVPList);
+
         Intent data = new Intent();
         data.putExtra("action", "add");
         data.putExtra("eventTitle", eventTitleText.getText().toString());
         data.putExtra("eventDescription", eventDescriptionText.getText().toString());
         data.putExtra("eventLocation", eventLocationText.getText().toString());
         data.putExtra("eventTime", eventTimeText.getText().toString());
+        data.putExtra("RSVPList", eventRSVPList.getText().toString());
         setResult(RESULT_OK,data);
         finish();
     }
