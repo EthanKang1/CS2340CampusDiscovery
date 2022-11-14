@@ -15,6 +15,10 @@ import com.example.campusdiscovery.R;
 
 public class LoginActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
+    /**
+     * Initializes the new activity.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,14 +33,18 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        String msg = adapterView.getItemAtPosition(i).toString();
+        return;
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
-
+    return;
     }
 
+    /**
+     * Performs field validation and launches the EventActivity if successful.
+     * @param view
+     */
     public void sendMessage(View view) {
         Intent intent = new Intent(this, EventActivity.class);
 

@@ -27,6 +27,7 @@ public class EventsAdapter extends ArrayAdapter<Event>{
     private String username;
 
     private final List<String> statuses = Arrays.asList("Will Attend", "Maybe", "Won't Attend", "I'm Your Nemesis");
+    private final List<String> badStatuses = Arrays.asList("Won't Attend", "I'm Your Nemesis");
 
     public EventsAdapter(Context context, List<Event> events, BtnClickListener listener, SpinnerListener spinnerListener, String username) {
         super(context, 0, events);
@@ -56,6 +57,10 @@ public class EventsAdapter extends ArrayAdapter<Event>{
         eventLocation.setText(event.getLocation());
         TextView eventHost = (TextView) convertView.findViewById(R.id.eventHost);
         eventHost.setText("Hosted by " + event.getHost());
+        TextView eventCapacity = (TextView) convertView.findViewById((R.id.eventCapacity));
+        eventCapacity.setText(event.getCapacity());
+        TextView eventAttendees = (TextView) convertView.findViewById(R.id.eventAttendees);
+        eventAttendees.setText(event.getAttendees());
         deleteButton.setTag(position);
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,7 +83,12 @@ public class EventsAdapter extends ArrayAdapter<Event>{
         Spinner statusSpinner = (Spinner) convertView.findViewById(R.id.statusSpinner);
 //        statusSpinner.setOnItemSelectedListener(this);
         ArrayAdapter<String> statusAdapter = new ArrayAdapter<String>(this.context, android.R.layout.simple_spinner_item, this.statuses);
-        statusSpinner.setAdapter(statusAdapter);
+        ArrayAdapter<String> badStatusAdapter = new ArrayAdapter<String>(this.context, android.R.layout.simple_spinner_item, this.badStatuses);
+        if (event.getRSVPList().contains(this.username) || event.getRSVPList().contains("") || this.username.equals(event.getHost())) {
+            statusSpinner.setAdapter(statusAdapter);
+        } else {
+            statusSpinner.setAdapter(badStatusAdapter);
+        }
         statusSpinner.setSelection(event.getStatus(this.username));
         statusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

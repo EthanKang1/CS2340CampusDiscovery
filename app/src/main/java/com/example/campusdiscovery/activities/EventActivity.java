@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -27,6 +28,7 @@ import androidx.core.content.res.ResourcesCompat;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class EventActivity extends AppCompatActivity{
@@ -62,9 +64,10 @@ public class EventActivity extends AppCompatActivity{
                     String eventLocation = data.getStringExtra("eventLocation");
                     String eventTime = data.getStringExtra("eventTime");
                     String action = data.getStringExtra("action");
+                    String RSVPList = data.getStringExtra("RSVPList");
                     int eventPosition = data.getIntExtra("eventPosition", -1);
-
-                    Event newEvent = new Event(eventTitle, eventDescription, eventLocation, eventTime, getUserName());
+                    String eventCapacity = data.getStringExtra("eventCapacity");
+                    Event newEvent = new Event(eventTitle, eventDescription, eventLocation, eventTime, eventCapacity, getUserName(), RSVPList);
                     if (action.equals("add")) {
                         addEvent(newEvent);
                     } else if (action.equals("edit")) {
@@ -75,10 +78,17 @@ public class EventActivity extends AppCompatActivity{
         }
     );
 
+    /**
+     * Initializes the new activity.
+     * Pulls the current user data from the the intent extras, loads the existing event data from
+     * storage, and builds the event screen from this data.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event);
+
 
         // stores visual element variables
         this.eventListView = (ListView) findViewById(R.id.lvItems);
@@ -99,6 +109,11 @@ public class EventActivity extends AppCompatActivity{
 
         // initialize event adapter
         this.eventsAdapter = new EventsAdapter(this, this.pageEventList, new BtnClickListener() {
+            /**
+             * Method that handles when a button is clicked on an event item.
+             * @param position the position of the event
+             * @param action the desired action of the mouse click
+             */
             @Override
             public void onBtnClick(int position, String action) {
                 if (action == "delete") {
@@ -108,17 +123,29 @@ public class EventActivity extends AppCompatActivity{
                 }
             }
         }, new SpinnerListener() {
+            /**
+             * Method that captures an event change on the spinner (toggle) on an event item.
+             * @param position the position of the event
+             * @param status the resulting status clicked
+             */
             @Override
             public void onItemSelect(int position, int status) {
-                System.out.println(position);
-                System.out.println(status);
-                editEventStatus(position, status);
+                if (eventList.get(position).getRSVPList().contains(userName) || eventList.get(position).getRSVPList().contains("")) {
+                    editEventStatus(position, status);
+                }
             }
         }, getUserName());
 
         this.eventListView.setAdapter(this.eventsAdapter);
         this.eventListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
+            /**
+             * Method that handles a click on an event listing itself.
+             * @param adapter
+             * @param v
+             * @param position
+             * @param arg3
+             */
             @Override
             public void onItemClick(AdapterView<?> adapter, View v, int position,
                                     long arg3)
@@ -131,6 +158,11 @@ public class EventActivity extends AppCompatActivity{
         this.loadEventPage();
     }
 
+    /**
+     * A method that launches the EditEventActivity screen while passing in relevant event
+     * information.
+     * @param position the position of the current event
+     */
     public void openEditEventActivity(int position){
         System.out.println("Correct launch");
         Event currentEvent = this.eventList.get(position);
@@ -140,15 +172,24 @@ public class EventActivity extends AppCompatActivity{
         intent.putExtra("eventLocation", currentEvent.getLocation());
         intent.putExtra("eventTime", currentEvent.getTime());
         intent.putExtra("eventPosition", position);
+        intent.putExtra("eventCapacity", currentEvent.getCapacity());
         eventActivityResultLauncher.launch(intent);
     }
 
+    /**
+     * A method that launches the AddEventActivity screen.
+     * @param view
+     */
     public void openAddEventActivity(View view) {
 
         Intent intent = new Intent(this, AddEventActivity.class);
         eventActivityResultLauncher.launch(intent);
     }
 
+    /**
+     * A method that opens the ViewEventActivity for a given activiy given its position
+     * @param position the position of the target activity
+     */
     public void openViewEventActivity(int position) {
         System.out.println("Correct launch");
         Event currentEvent = this.eventList.get(position);
@@ -158,9 +199,16 @@ public class EventActivity extends AppCompatActivity{
         intent.putExtra("eventLocation", currentEvent.getLocation());
         intent.putExtra("eventTime", currentEvent.getTime());
         intent.putExtra("eventPosition", position);
+        intent.putExtra("eventCapacity", currentEvent.getCapacity());
+        intent.putExtra("eventAttendees", currentEvent.getAttendees());
         eventActivityResultLauncher.launch(intent);
     }
 
+    /**
+     * Adds an event to the activities attribute, saves this to data, and calls for a refresh of
+     * the events screen.
+     * @param event the event to add
+     */
     private void addEvent(Event event) {
         this.eventList.add(event);
         this.updateEventsPref();
@@ -171,6 +219,11 @@ public class EventActivity extends AppCompatActivity{
         this.loadEventPage(0);
     }
 
+    /**
+     * Removes an event given its position, saves this updated list, and calls for a refresh of the
+     * events screen
+     * @param position the position of the event to remove
+     */
     private void deleteEvent(int position) {
         if (this.eventList.get(position).getHost().equals(this.userName) || this.userType.equals("Organizer")) {
             this.eventList.remove(position);
@@ -182,6 +235,11 @@ public class EventActivity extends AppCompatActivity{
         }
     }
 
+    /**
+     * Replaces an existing event with a new Event object.
+     * @param position the position of the event to replace
+     * @param event the event to replace the previous event
+     */
     private void editEvent(int position, Event event) {
         this.eventList.set(position, event);
         this.updateEventsPref();
@@ -190,12 +248,22 @@ public class EventActivity extends AppCompatActivity{
         this.loadEventPage();
     }
 
+    /**
+     * Changes the status of an event
+     * @param position the position of the target event
+     * @param status the current desired status of the event
+     */
     private void editEventStatus(int position, int status) {
-        this.eventList.get(position).setStatus(getUserName(), status);
-        this.updateEventsPref();
-        System.out.println("status edited");
+        if (eventList.get(position).getRSVPList().contains(userName) || eventList.get(position).getRSVPList().contains("")) {
+            this.eventList.get(position).setStatus(getUserName(), status);
+            this.updateEventsPref();
+            System.out.println("status edited");
+        }
     }
 
+    /**
+     * Saves the activity's event list to local storage.
+     */
     private void updateEventsPref() {
         SharedPreferences sh = getSharedPreferences("EventsPref",MODE_PRIVATE);
         SharedPreferences.Editor prefsEditor = sh.edit();
@@ -206,6 +274,9 @@ public class EventActivity extends AppCompatActivity{
         prefsEditor.commit();
     }
 
+    /**
+     * Loads saved event data from local storage into the activity's attributes.
+     */
     private void loadEventsPref() {
         SharedPreferences sh = getSharedPreferences("EventsPref", MODE_APPEND);
         String eventsPref = sh.getString("events", "");
@@ -220,6 +291,10 @@ public class EventActivity extends AppCompatActivity{
 
     }
 
+    /**
+     * Method that modifies the displayed events on the screen.
+     * @param page the desired page to view
+     */
     private void loadEventPage(int page)
     {
         this.currentPage = page;
@@ -248,10 +323,16 @@ public class EventActivity extends AppCompatActivity{
         this.eventsAdapter.notifyDataSetChanged();
     }
 
+    /**
+     * Chained method, uses saved attribute if no page is specified.
+     */
     private void loadEventPage() {
         this.loadEventPage(this.currentPage);
     }
 
+    /**
+     * Initializes the pagination buttons.
+     */
     private void initializeEventButtonFooter()
     {
         this.noOfBtns = (int) Math.ceil((float) this.eventList.size() / NUM_ITEMS_PAGE);
@@ -276,13 +357,31 @@ public class EventActivity extends AppCompatActivity{
         }
     }
 
+    /**
+     * Setter method for the username attribute.
+     * @param userName the current username
+     */
     private void setUserName(String userName) {
         this.userName = userName;
     }
+
+    /**
+     * Setter method for the usertype attribute.
+     * @param userType the current usertype
+     */
     private void setUserType(String userType) {
         this.userType = userType;
     }
 
+    /**
+     * Getter method for the username attribute.
+     * @return the current username
+     */
     private String getUserName() { return this.userName; }
+
+    /**
+     * Getter method for the usertype attribute.
+     * @return the current usertype
+     */
     private String getUserType() { return this.userType; }
 }
