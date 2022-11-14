@@ -12,7 +12,6 @@ import android.widget.Spinner;
 import com.example.campusdiscovery.R;
 
 public class AddEventActivity extends AppCompatActivity {
-
     /**
      * Initializes the new activity.
      * @param savedInstanceState
@@ -42,6 +41,7 @@ public class AddEventActivity extends AppCompatActivity {
         EditText eventDescriptionText = findViewById(R.id.eventDescriptionEditText);
         EditText eventLocationText = findViewById(R.id.eventLocationEditText);
         EditText eventTimeText = findViewById(R.id.eventTimeEditText);
+        EditText eventCapacityText = findViewById(R.id.eventCapacityText);
         EditText eventRSVPList = findViewById(R.id.RSVPList);
 
         Intent data = new Intent();
@@ -50,6 +50,7 @@ public class AddEventActivity extends AppCompatActivity {
         data.putExtra("eventDescription", eventDescriptionText.getText().toString());
         data.putExtra("eventLocation", eventLocationText.getText().toString());
         data.putExtra("eventTime", eventTimeText.getText().toString());
+        data.putExtra("eventCapacity", eventCapacityText.getText().toString());
         data.putExtra("RSVPList", eventRSVPList.getText().toString());
         setResult(RESULT_OK,data);
         finish();

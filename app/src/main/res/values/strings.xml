@@ -20,6 +20,8 @@
     <string name="upcoming_events">Upcoming:</string>
     <string name="events">Events</string>
     <string name="add_event">add event</string>
+    <string name="event_capacity">Event Capacity</string>
+    <string name="new_event_capacity">New Event Capacity</string>
 
     <string-array name="userTypes">
         <item>Student</item>

@@ -38,7 +38,7 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
 
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
-        return;
+    return;
     }
 
     /**

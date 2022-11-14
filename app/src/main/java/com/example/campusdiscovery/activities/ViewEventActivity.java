@@ -29,16 +29,22 @@ public class ViewEventActivity extends AppCompatActivity {
         String eventDescription = extras.getString("eventDescription");
         String eventLocation = extras.getString("eventLocation");
         String eventTime = extras.getString("eventTime");
+        String eventCapacity = extras.getString("eventCapacity");
+        String eventAttendees = extras.getString("eventAttendees");
 
         TextView eventTitleText = findViewById(R.id.eventTitle);
         TextView eventDescriptionText = findViewById(R.id.eventDescription);
         TextView eventLocationText = findViewById(R.id.eventLocation);
         TextView eventTimeText = findViewById(R.id.eventTime);
+        TextView eventCapacityText = findViewById(R.id.eventCapacity);
+        TextView eventAttendeesText = findViewById(R.id.eventAttendees);
 
         eventTitleText.setText(eventTitle);
         eventDescriptionText.setText(eventDescription);
         eventLocationText.setText(eventLocation);
         eventTimeText.setText(eventTime);
+        eventCapacityText.setText(eventCapacity);
+        eventAttendeesText.setText(eventAttendees);
     }
 
     /**

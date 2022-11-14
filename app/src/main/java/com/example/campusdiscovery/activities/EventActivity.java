@@ -66,8 +66,8 @@ public class EventActivity extends AppCompatActivity{
                     String action = data.getStringExtra("action");
                     String RSVPList = data.getStringExtra("RSVPList");
                     int eventPosition = data.getIntExtra("eventPosition", -1);
-
-                    Event newEvent = new Event(eventTitle, eventDescription, eventLocation, eventTime, getUserName(), RSVPList);
+                    String eventCapacity = data.getStringExtra("eventCapacity");
+                    Event newEvent = new Event(eventTitle, eventDescription, eventLocation, eventTime, eventCapacity, getUserName(), RSVPList);
                     if (action.equals("add")) {
                         addEvent(newEvent);
                     } else if (action.equals("edit")) {
@@ -88,6 +88,7 @@ public class EventActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event);
+
 
         // stores visual element variables
         this.eventListView = (ListView) findViewById(R.id.lvItems);
@@ -170,6 +171,7 @@ public class EventActivity extends AppCompatActivity{
         intent.putExtra("eventLocation", currentEvent.getLocation());
         intent.putExtra("eventTime", currentEvent.getTime());
         intent.putExtra("eventPosition", position);
+        intent.putExtra("eventCapacity", currentEvent.getCapacity());
         eventActivityResultLauncher.launch(intent);
     }
 
@@ -196,6 +198,8 @@ public class EventActivity extends AppCompatActivity{
         intent.putExtra("eventLocation", currentEvent.getLocation());
         intent.putExtra("eventTime", currentEvent.getTime());
         intent.putExtra("eventPosition", position);
+        intent.putExtra("eventCapacity", currentEvent.getCapacity());
+        intent.putExtra("eventAttendees", currentEvent.getAttendees());
         eventActivityResultLauncher.launch(intent);
     }
 

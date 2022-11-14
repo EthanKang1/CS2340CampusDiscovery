@@ -29,7 +29,6 @@ public class EventsAdapter extends ArrayAdapter<Event>{
     private final List<String> statuses = Arrays.asList("Will Attend", "Maybe", "Won't Attend", "I'm Your Nemesis");
     private final List<String> badStatuses = Arrays.asList("Won't Attend", "I'm Your Nemesis");
 
-
     public EventsAdapter(Context context, List<Event> events, BtnClickListener listener, SpinnerListener spinnerListener, String username) {
         super(context, 0, events);
         this.context = context;
@@ -58,6 +57,10 @@ public class EventsAdapter extends ArrayAdapter<Event>{
         eventLocation.setText(event.getLocation());
         TextView eventHost = (TextView) convertView.findViewById(R.id.eventHost);
         eventHost.setText("Hosted by " + event.getHost());
+        TextView eventCapacity = (TextView) convertView.findViewById((R.id.eventCapacity));
+        eventCapacity.setText(event.getCapacity());
+        TextView eventAttendees = (TextView) convertView.findViewById(R.id.eventAttendees);
+        eventAttendees.setText(event.getAttendees());
         deleteButton.setTag(position);
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override

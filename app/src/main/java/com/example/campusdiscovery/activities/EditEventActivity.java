@@ -16,7 +16,6 @@ public class EditEventActivity extends AppCompatActivity {
     private String eventTime;
     private static int position;
 
-
     /**
      * Initializes the new activity.
      * Pulls the current event data from the the intent extras and sets the text fields to the
@@ -34,7 +33,8 @@ public class EditEventActivity extends AppCompatActivity {
             this.setValues(extras.getString("eventTitle"),
                     extras.getString("eventDescription"),
                     extras.getString("eventLocation"),
-                    extras.getString("eventTime"));
+                    extras.getString("eventTime"),
+                    extras.getString("eventCapacity"));
         }
     }
 
@@ -57,17 +57,20 @@ public class EditEventActivity extends AppCompatActivity {
     private void setValues(String eventTitle,
                            String eventDescription,
                            String eventLocation,
-                           String eventTime) {
+                           String eventTime,
+                           String eventCapacity) {
 
         EditText eventTitleText = findViewById(R.id.newEventTitleEditText);
         EditText eventDescriptionText = findViewById(R.id.newEventDescriptionEditText);
         EditText eventLocationText = findViewById(R.id.newEventLocationEditText);
         EditText eventTimeText = findViewById(R.id.newEventTimeEditText);
+        EditText eventCapacityText = findViewById(R.id.newEventCapacityText);
 
         eventTitleText.setText(eventTitle);
         eventDescriptionText.setText(eventDescription);
         eventLocationText.setText(eventLocation);
         eventTimeText.setText(eventTime);
+        eventCapacityText.setText(eventCapacity);
     }
 
     /**
@@ -81,6 +84,7 @@ public class EditEventActivity extends AppCompatActivity {
         EditText eventDescriptionText = findViewById(R.id.newEventDescriptionEditText);
         EditText eventLocationText = findViewById(R.id.newEventLocationEditText);
         EditText eventTimeText = findViewById(R.id.newEventTimeEditText);
+        EditText eventCapacityText = findViewById(R.id.newEventCapacityText);
 
         Intent data = new Intent();
         data.putExtra("action", "edit");
@@ -89,6 +93,7 @@ public class EditEventActivity extends AppCompatActivity {
         data.putExtra("eventDescription", eventDescriptionText.getText().toString());
         data.putExtra("eventLocation", eventLocationText.getText().toString());
         data.putExtra("eventTime", eventTimeText.getText().toString());
+        data.putExtra("eventCapacity", eventCapacityText.getText().toString());
         setResult(RESULT_OK,data);
         finish();
     }

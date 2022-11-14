@@ -16,7 +16,8 @@ public class EventUnitTest {
     private final String EVENT1_LOCATION = "event1 location";
     private final String EVENT1_TIME = "event1 time";
     private final String EVENT1_HOST = "event1 host";
-    private final String Event1_RSVPList = "Tony, Levi";
+    private final String EVENT1_CAPACITY = "5";
+    private final String EVENT1_RSVPLIST = "Tony, Levi";
 
     // example event #2
     private final String EVENT2_NAME = "event2";
@@ -24,7 +25,9 @@ public class EventUnitTest {
     private final String EVENT2_LOCATION = "event2 location";
     private final String EVENT2_TIME = "event2 time";
     private final String EVENT2_HOST = "event2 host";
-    private final String Event2_RSVPList = "Ethan, Levi";
+    private final String EVENT2_CAPACITY = "2";
+    private final String EVENT2_RSVPLIST = "Ethan, Levi";
+  
     // example usernames
     private final String USERNAME = "testUsername";
 
@@ -34,8 +37,9 @@ public class EventUnitTest {
                                     EVENT1_DESCRIPTION,
                                     EVENT1_LOCATION,
                                     EVENT1_TIME,
+                                    EVENT1_CAPACITY,
                                     EVENT1_HOST,
-                                    Event1_RSVPList);
+                                    EVENT1_RSVPLIST);
 
         assertEquals(testEvent1.getName(), EVENT1_NAME);
         assertEquals(testEvent1.getDescription(), EVENT1_DESCRIPTION);
@@ -50,14 +54,17 @@ public class EventUnitTest {
                 EVENT1_DESCRIPTION,
                 EVENT1_LOCATION,
                 EVENT1_TIME,
+                EVENT1_CAPACITY,
                 EVENT1_HOST,
-                Event1_RSVPList);
+                EVENT1_RSVPLIST);
+>>> main
         Event testEvent2 = new Event(EVENT2_NAME,
                 EVENT2_DESCRIPTION,
                 EVENT2_LOCATION,
                 EVENT2_TIME,
+                EVENT2_CAPACITY,
                 EVENT2_HOST,
-                Event2_RSVPList);
+                EVENT2_RSVPLIST);
 
         assertNotEquals(testEvent1.getId(), testEvent2.getId());
     }
@@ -68,8 +75,9 @@ public class EventUnitTest {
                 EVENT1_DESCRIPTION,
                 EVENT1_LOCATION,
                 EVENT1_TIME,
+                EVENT1_CAPACITY,
                 EVENT1_HOST,
-                Event1_RSVPList);
+                EVENT1_RSVPLIST);
 
         testEvent1.setStatus(USERNAME, 1);
 
