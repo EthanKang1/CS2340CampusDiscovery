@@ -27,7 +27,7 @@ public class EventUnitTest {
     private final String EVENT2_HOST = "event2 host";
     private final String EVENT2_CAPACITY = "2";
     private final String EVENT2_RSVPLIST = "Ethan, Levi";
-
+  
     // example usernames
     private final String USERNAME = "testUsername";
 
@@ -57,6 +57,7 @@ public class EventUnitTest {
                 EVENT1_CAPACITY,
                 EVENT1_HOST,
                 EVENT1_RSVPLIST);
+>>> main
         Event testEvent2 = new Event(EVENT2_NAME,
                 EVENT2_DESCRIPTION,
                 EVENT2_LOCATION,

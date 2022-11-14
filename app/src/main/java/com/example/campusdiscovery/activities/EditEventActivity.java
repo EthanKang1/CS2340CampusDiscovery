@@ -9,7 +9,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.campusdiscovery.R;
 
-
 public class EditEventActivity extends AppCompatActivity {
     private String eventTitle;
     private String eventDescription;
@@ -38,8 +37,6 @@ public class EditEventActivity extends AppCompatActivity {
                     extras.getString("eventCapacity"));
         }
     }
-
-
 
     /**
      * Ends the activity with no result following a back click.

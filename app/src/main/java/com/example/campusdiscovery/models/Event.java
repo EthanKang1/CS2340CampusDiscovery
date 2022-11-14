@@ -58,13 +58,17 @@ public class Event {
         if (username == null) {
             return -1;
         }
-
+      
         if (this.RSVPList == null) {
             this.RSVPList = "";
         }
         List<String> RSVPList1 = Arrays.asList(this.RSVPList.split(","));
         if ((RSVPList1.contains(username) || RSVPList1.contains("") || username.equals(this.host)) && this.statusMap.get(username) == null) {
             this.setStatus(username, DEFAULT_STATUS);
+            return this.statusMap.get(username);
+        }
+        if (this.statusMap.get(username) == null) {
+            this.setStatus(username, BAD_DEFAULT_STATUS);
         }
         return this.statusMap.get(username);
     }

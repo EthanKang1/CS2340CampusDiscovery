@@ -96,6 +96,8 @@ public class EventsAdapter extends ArrayAdapter<Event>{
 //                System.out.println(position);
 //                System.out.println(parent.getItemAtPosition(arg2).toString());
                 spinnerListener.onItemSelect(position, arg2);
+
+
             }
 
             @Override

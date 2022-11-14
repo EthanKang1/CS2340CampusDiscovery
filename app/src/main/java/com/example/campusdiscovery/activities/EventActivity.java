@@ -164,7 +164,6 @@ public class EventActivity extends AppCompatActivity{
      * @param position the position of the current event
      */
     public void openEditEventActivity(int position){
-        System.out.println("Correct launch");
         Event currentEvent = this.eventList.get(position);
         Intent intent = new Intent(this, EditEventActivity.class);
         intent.putExtra("eventTitle", currentEvent.getName());
