@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -27,6 +28,7 @@ import androidx.core.content.res.ResourcesCompat;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class EventActivity extends AppCompatActivity{
@@ -62,9 +64,10 @@ public class EventActivity extends AppCompatActivity{
                     String eventLocation = data.getStringExtra("eventLocation");
                     String eventTime = data.getStringExtra("eventTime");
                     String action = data.getStringExtra("action");
+                    String RSVPList = data.getStringExtra("RSVPList");
                     int eventPosition = data.getIntExtra("eventPosition", -1);
 
-                    Event newEvent = new Event(eventTitle, eventDescription, eventLocation, eventTime, getUserName());
+                    Event newEvent = new Event(eventTitle, eventDescription, eventLocation, eventTime, getUserName(), RSVPList);
                     if (action.equals("add")) {
                         addEvent(newEvent);
                     } else if (action.equals("edit")) {
@@ -126,7 +129,9 @@ public class EventActivity extends AppCompatActivity{
              */
             @Override
             public void onItemSelect(int position, int status) {
-                editEventStatus(position, status);
+                if (eventList.get(position).getRSVPList().contains(userName) || eventList.get(position).getRSVPList().contains("")) {
+                    editEventStatus(position, status);
+                }
             }
         }, getUserName());
 
@@ -244,9 +249,11 @@ public class EventActivity extends AppCompatActivity{
      * @param status the current desired status of the event
      */
     private void editEventStatus(int position, int status) {
-        this.eventList.get(position).setStatus(getUserName(), status);
-        this.updateEventsPref();
-        System.out.println("status edited");
+        if (eventList.get(position).getRSVPList().contains(userName) || eventList.get(position).getRSVPList().contains("")) {
+            this.eventList.get(position).setStatus(getUserName(), status);
+            this.updateEventsPref();
+            System.out.println("status edited");
+        }
     }
 
     /**
