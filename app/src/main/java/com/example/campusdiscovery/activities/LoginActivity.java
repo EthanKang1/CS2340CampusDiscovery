@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.campusdiscovery.EventActivityNew;
 import com.example.campusdiscovery.R;
 
 public class LoginActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
@@ -42,11 +43,11 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
     }
 
     /**
-     * Performs field validation and launches the EventActivity if successful.
+     * Performs field validation and launches the EventActivityNew if successful.
      * @param view
      */
     public void sendMessage(View view) {
-        Intent intent = new Intent(this, EventActivity.class);
+        Intent intent = new Intent(this, EventActivityNew.class);
 
         EditText userNameText = findViewById(R.id.userName);
         Spinner userTypeSpinner = (Spinner) findViewById(R.id.userType);

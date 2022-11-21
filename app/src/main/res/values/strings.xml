@@ -18,7 +18,7 @@
     <string name="campus_discovery">Campus Discovery</string>
     <string name="georgia_tech">Georgia Tech</string>
     <string name="upcoming_events">Upcoming:</string>
-    <string name="events">Events</string>
+    <string name="events">All Events</string>
     <string name="add_event">add event</string>
     <string name="event_capacity">Event Capacity</string>
     <string name="new_event_capacity">New Event Capacity</string>
@@ -35,5 +35,10 @@
         <item>Event 3</item>
         <item>Event 4</item>
     </string-array>
+    <string name="title_activity_event_new">EventActivityNew</string>
+    <string name="tab_text_1">All Events</string>
+    <string name="tab_text_2">Your Events</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
 

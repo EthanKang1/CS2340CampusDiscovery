@@ -1,37 +1,54 @@
-package com.example.campusdiscovery.activities;
+package com.example.campusdiscovery.ui.main;
+
+import static android.content.Context.MODE_APPEND;
+import static android.content.Context.MODE_PRIVATE;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-
-import com.example.campusdiscovery.interfaces.BtnClickListener;
-import com.example.campusdiscovery.models.Event;
-import com.example.campusdiscovery.adapters.EventsAdapter;
-import com.example.campusdiscovery.R;
-import com.example.campusdiscovery.interfaces.SpinnerListener;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.fragment.app.Fragment;
+
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+
+import com.example.campusdiscovery.R;
+import com.example.campusdiscovery.activities.AddEventActivity;
+import com.example.campusdiscovery.activities.EditEventActivity;
+import com.example.campusdiscovery.activities.ViewEventActivity;
+import com.example.campusdiscovery.adapters.EventsAdapter;
+import com.example.campusdiscovery.interfaces.BtnClickListener;
+import com.example.campusdiscovery.interfaces.SpinnerListener;
+import com.example.campusdiscovery.models.Event;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-public class EventActivity extends AppCompatActivity{
+/**
+ * A simple {@link Fragment} subclass.
+ * Use the {@link AllEventsFragment#newInstance} factory method to
+ * create an instance of this fragment.
+ */
+public class AllEventsFragment extends Fragment {
+
+    // TODO: Rename parameter arguments, choose names that match
+    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String USERNAME = "";
+    private static final String USERTYPE = "";
 
     // current user information
     private String userName;
@@ -53,53 +70,72 @@ public class EventActivity extends AppCompatActivity{
     private int NUM_ITEMS_PAGE = 10;
     private LinearLayout.LayoutParams paginationButtonLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
     private final ActivityResultLauncher<Intent> eventActivityResultLauncher = registerForActivityResult(
-        new ActivityResultContracts.StartActivityForResult(),
-        new ActivityResultCallback<ActivityResult>() {
-            @Override
-            public void onActivityResult(ActivityResult result) {
-                if (result.getResultCode() == Activity.RESULT_OK) {
-                    Intent data = result.getData();
-                    String eventTitle = data.getStringExtra("eventTitle");
-                    String eventDescription = data.getStringExtra("eventDescription");
-                    String eventLocation = data.getStringExtra("eventLocation");
-                    String eventTime = data.getStringExtra("eventTime");
-                    String action = data.getStringExtra("action");
-                    String RSVPList = data.getStringExtra("RSVPList");
-                    int eventPosition = data.getIntExtra("eventPosition", -1);
-                    String eventCapacity = data.getStringExtra("eventCapacity");
-                    Event newEvent = new Event(eventTitle, eventDescription, eventLocation, eventTime, eventCapacity, getUserName(), RSVPList);
-                    if (action.equals("add")) {
-                        addEvent(newEvent);
-                    } else if (action.equals("edit")) {
-                        editEvent(eventPosition, newEvent);
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        Intent data = result.getData();
+                        String eventTitle = data.getStringExtra("eventTitle");
+                        String eventDescription = data.getStringExtra("eventDescription");
+                        String eventLocation = data.getStringExtra("eventLocation");
+                        String eventTime = data.getStringExtra("eventTime");
+                        String action = data.getStringExtra("action");
+                        String RSVPList = data.getStringExtra("RSVPList");
+                        int eventPosition = data.getIntExtra("eventPosition", -1);
+                        String eventCapacity = data.getStringExtra("eventCapacity");
+                        Event newEvent = new Event(eventTitle, eventDescription, eventLocation, eventTime, eventCapacity, getUserName(), RSVPList);
+                        if (action.equals("add")) {
+                            addEvent(newEvent);
+                        } else if (action.equals("edit")) {
+                            editEvent(eventPosition, newEvent);
+                        }
                     }
                 }
             }
-        }
     );
 
-    /**
-     * Initializes the new activity.
-     * Pulls the current user data from the the intent extras, loads the existing event data from
-     * storage, and builds the event screen from this data.
-     * @param savedInstanceState
-     */
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_event);
+    public AllEventsFragment() {
+        // Required empty public constructor
+    }
 
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @param param1 Parameter 1.
+     * @param param2 Parameter 2.
+     * @return A new instance of fragment AllEventsFragment.
+     */
+    // TODO: Rename and change types and number of parameters
+    public static AllEventsFragment newInstance(String userName, String userType) {
+        AllEventsFragment fragment = new AllEventsFragment();
+        Bundle args = new Bundle();
+        args.putString(USERNAME, userName);
+        args.putString(USERTYPE, userType);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            userName = getArguments().getString(USERNAME);
+            userType = getArguments().getString(USERTYPE);
+        }
+
+
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_all_events, container, false);
 
         // stores visual element variables
-        this.eventListView = (ListView) findViewById(R.id.lvItems);
-        this.paginationButtonLayout = (LinearLayout) findViewById(R.id.btnLay);
-
-        // gets user data from login screen
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            this.setUserName(extras.getString("userName"));
-            this.setUserType(extras.getString("userType"));
-        }
+        this.eventListView = (ListView) view.findViewById(R.id.lvItems);
+        this.paginationButtonLayout = (LinearLayout) view.findViewById(R.id.btnLay);
 
         // loads event data from storage
         this.loadEventsPref();
@@ -108,7 +144,7 @@ public class EventActivity extends AppCompatActivity{
         initializeEventButtonFooter();
 
         // initialize event adapter
-        this.eventsAdapter = new EventsAdapter(this, this.pageEventList, new BtnClickListener() {
+        this.eventsAdapter = new EventsAdapter(getActivity(), this.pageEventList, new BtnClickListener() {
             /**
              * Method that handles when a button is clicked on an event item.
              * @param position the position of the event
@@ -156,6 +192,19 @@ public class EventActivity extends AppCompatActivity{
 
         // loads first event page
         this.loadEventPage();
+
+        Button button = (Button) view.findViewById(R.id.addEvent);
+        button.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Intent intent = new Intent(getActivity(), AddEventActivity.class);
+                eventActivityResultLauncher.launch(intent);
+            }
+        });
+
+        return view;
     }
 
     /**
@@ -165,23 +214,13 @@ public class EventActivity extends AppCompatActivity{
      */
     public void openEditEventActivity(int position){
         Event currentEvent = this.eventList.get(position);
-        Intent intent = new Intent(this, EditEventActivity.class);
+        Intent intent = new Intent(getActivity(), EditEventActivity.class);
         intent.putExtra("eventTitle", currentEvent.getName());
         intent.putExtra("eventDescription", currentEvent.getDescription());
         intent.putExtra("eventLocation", currentEvent.getLocation());
         intent.putExtra("eventTime", currentEvent.getTime());
         intent.putExtra("eventPosition", position);
         intent.putExtra("eventCapacity", currentEvent.getCapacity());
-        eventActivityResultLauncher.launch(intent);
-    }
-
-    /**
-     * A method that launches the AddEventActivity screen.
-     * @param view
-     */
-    public void openAddEventActivity(View view) {
-
-        Intent intent = new Intent(this, AddEventActivity.class);
         eventActivityResultLauncher.launch(intent);
     }
 
@@ -192,7 +231,7 @@ public class EventActivity extends AppCompatActivity{
     public void openViewEventActivity(int position) {
         System.out.println("Correct launch");
         Event currentEvent = this.eventList.get(position);
-        Intent intent = new Intent(this, ViewEventActivity.class);
+        Intent intent = new Intent(getActivity(), ViewEventActivity.class);
         intent.putExtra("eventTitle", currentEvent.getName());
         intent.putExtra("eventDescription", currentEvent.getDescription());
         intent.putExtra("eventLocation", currentEvent.getLocation());
@@ -202,6 +241,95 @@ public class EventActivity extends AppCompatActivity{
         intent.putExtra("eventAttendees", currentEvent.getAttendees());
         eventActivityResultLauncher.launch(intent);
     }
+
+    /**
+     * Loads saved event data from local storage into the activity's attributes.
+     */
+    private void loadEventsPref() {
+        SharedPreferences sh = getActivity().getSharedPreferences("EventsPref", MODE_APPEND);
+        String eventsPref = sh.getString("events", "");
+
+        Gson gson = new Gson();
+        Type eventListType = new TypeToken<List<Event>>() {}.getType();
+        if (eventsPref == "") {
+            this.eventList = new ArrayList<Event>();
+        } else {
+            this.eventList = gson.fromJson(eventsPref, eventListType);
+        }
+
+    }
+
+    /**
+     * Initializes the pagination buttons.
+     */
+    private void initializeEventButtonFooter()
+    {
+        this.noOfBtns = (int) Math.ceil((float) this.eventList.size() / NUM_ITEMS_PAGE);
+        this.btns = new Button[this.noOfBtns];
+
+        this.paginationButtonLayout.removeAllViews();
+
+        for(int i = 0; i < this.noOfBtns;i++) {
+            // create page button
+            this.btns[i] = new Button(getActivity());
+            this.btns[i].setBackgroundColor(getResources().getColor(android.R.color.transparent));
+            this.btns[i].setText(String.valueOf(i + 1));
+            this.paginationButtonLayout.addView(btns[i], this.paginationButtonLayoutParams);
+
+            // create button click handler
+            final int j = i;
+            btns[j].setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    loadEventPage(j);
+                }
+            });
+        }
+    }
+
+    /**
+     * Method that modifies the displayed events on the screen.
+     * @param page the desired page to view
+     */
+    private void loadEventPage(int page)
+    {
+        this.currentPage = page;
+        this.pageEventList.clear();
+
+        for (int i = 0; i < NUM_ITEMS_PAGE ; i++)  {
+            if ((page * NUM_ITEMS_PAGE) + i < this.eventList.size()) {
+                this.pageEventList.add(this.eventList.get((page * NUM_ITEMS_PAGE) + i));
+            }
+        }
+
+        for(int i = 0;i < this.noOfBtns; i++)
+        {
+            if(i == page)
+            {
+                btns[page].setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.tech_gold, null));
+                btns[i].setTextColor(getResources().getColor(android.R.color.white));
+            }
+            else
+            {
+                btns[i].setBackgroundColor(getResources().getColor(android.R.color.transparent));
+                btns[i].setTextColor(getResources().getColor(android.R.color.black));
+            }
+        }
+
+        this.eventsAdapter.notifyDataSetChanged();
+    }
+
+    /**
+     * Chained method, uses saved attribute if no page is specified.
+     */
+    private void loadEventPage() {
+        this.loadEventPage(this.currentPage);
+    }
+
+
+
+
+
+
 
     /**
      * Adds an event to the activities attribute, saves this to data, and calls for a refresh of
@@ -264,7 +392,7 @@ public class EventActivity extends AppCompatActivity{
      * Saves the activity's event list to local storage.
      */
     private void updateEventsPref() {
-        SharedPreferences sh = getSharedPreferences("EventsPref",MODE_PRIVATE);
+        SharedPreferences sh = getActivity().getSharedPreferences("EventsPref", MODE_PRIVATE);
         SharedPreferences.Editor prefsEditor = sh.edit();
         Gson gson = new Gson();
         String menuJson = gson.toJson(this.eventList);
@@ -273,88 +401,12 @@ public class EventActivity extends AppCompatActivity{
         prefsEditor.commit();
     }
 
-    /**
-     * Loads saved event data from local storage into the activity's attributes.
-     */
-    private void loadEventsPref() {
-        SharedPreferences sh = getSharedPreferences("EventsPref", MODE_APPEND);
-        String eventsPref = sh.getString("events", "");
 
-        Gson gson = new Gson();
-        Type eventListType = new TypeToken<List<Event>>() {}.getType();
-        if (eventsPref == "") {
-            this.eventList = new ArrayList<Event>();
-        } else {
-            this.eventList = gson.fromJson(eventsPref, eventListType);
-        }
 
-    }
 
-    /**
-     * Method that modifies the displayed events on the screen.
-     * @param page the desired page to view
-     */
-    private void loadEventPage(int page)
-    {
-        this.currentPage = page;
-        this.pageEventList.clear();
 
-        for (int i = 0; i < NUM_ITEMS_PAGE ; i++)  {
-            if ((page * NUM_ITEMS_PAGE) + i < this.eventList.size()) {
-                this.pageEventList.add(this.eventList.get((page * NUM_ITEMS_PAGE) + i));
-            }
-        }
 
-        for(int i = 0;i < this.noOfBtns; i++)
-        {
-            if(i == page)
-            {
-                btns[page].setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.tech_gold, null));
-                btns[i].setTextColor(getResources().getColor(android.R.color.white));
-            }
-            else
-            {
-                btns[i].setBackgroundColor(getResources().getColor(android.R.color.transparent));
-                btns[i].setTextColor(getResources().getColor(android.R.color.black));
-            }
-        }
 
-        this.eventsAdapter.notifyDataSetChanged();
-    }
-
-    /**
-     * Chained method, uses saved attribute if no page is specified.
-     */
-    private void loadEventPage() {
-        this.loadEventPage(this.currentPage);
-    }
-
-    /**
-     * Initializes the pagination buttons.
-     */
-    private void initializeEventButtonFooter()
-    {
-        this.noOfBtns = (int) Math.ceil((float) this.eventList.size() / NUM_ITEMS_PAGE);
-        this.btns = new Button[this.noOfBtns];
-
-        this.paginationButtonLayout.removeAllViews();
-
-        for(int i = 0; i < this.noOfBtns;i++) {
-            // create page button
-            this.btns[i] = new Button(this);
-            this.btns[i].setBackgroundColor(getResources().getColor(android.R.color.transparent));
-            this.btns[i].setText(String.valueOf(i + 1));
-            this.paginationButtonLayout.addView(btns[i], this.paginationButtonLayoutParams);
-
-            // create button click handler
-            final int j = i;
-            btns[j].setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    loadEventPage(j);
-                }
-            });
-        }
-    }
 
     /**
      * Setter method for the username attribute.

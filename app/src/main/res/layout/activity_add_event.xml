@@ -154,22 +154,4 @@
         app:layout_constraintTop_toBottomOf="@+id/eventLocationEditText"
         tools:ignore="TextContrastCheck" />
 
-    <EditText
-        android:id="@+id/RSVPList"
-        android:layout_width="277dp"
-        android:layout_height="52dp"
-        android:layout_marginStart="75dp"
-        android:layout_marginTop="132dp"
-        android:layout_marginEnd="75dp"
-        android:ems="10"
-        android:hint="RSVP List, comma seperated"
-        android:importantForAutofill="no"
-        android:inputType="textPersonName"
-        android:minHeight="48dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.509"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/eventLocationEditText"
-        tools:ignore="TextContrastCheck" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>
