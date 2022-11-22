@@ -10,8 +10,21 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.example.campusdiscovery.R;
+import com.example.campusdiscovery.models.Event;
+import com.google.gson.Gson;
 
 public class AddEventActivity extends AppCompatActivity {
+
+    // UI elements
+    EditText eventTitleText;
+    EditText eventDescriptionText;
+    EditText eventLocationText;
+    EditText eventTimeText;
+    EditText eventCapacityText;
+    EditText eventRSVPList;
+
+    Gson gson = new Gson();
+
     /**
      * Initializes the new activity.
      * @param savedInstanceState
@@ -20,6 +33,14 @@ public class AddEventActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_event);
+
+        // UI elements
+        this.eventTitleText = findViewById(R.id.eventTitleEditText);
+        this.eventDescriptionText = findViewById(R.id.eventDescriptionEditText);
+        this.eventLocationText = findViewById(R.id.eventLocationEditText);
+        this.eventTimeText = findViewById(R.id.eventTimeEditText);
+        this.eventCapacityText = findViewById(R.id.eventCapacityText);
+        this.eventRSVPList = findViewById(R.id.RSVPList);
     }
 
     /**
@@ -37,21 +58,19 @@ public class AddEventActivity extends AppCompatActivity {
      * @param view
      */
     public void submitClick(View view) {
-        EditText eventTitleText = findViewById(R.id.eventTitleEditText);
-        EditText eventDescriptionText = findViewById(R.id.eventDescriptionEditText);
-        EditText eventLocationText = findViewById(R.id.eventLocationEditText);
-        EditText eventTimeText = findViewById(R.id.eventTimeEditText);
-        EditText eventCapacityText = findViewById(R.id.eventCapacityText);
-        EditText eventRSVPList = findViewById(R.id.RSVPList);
+//
+
+        Event newEvent = new Event(eventTitleText.getText().toString(),
+                eventDescriptionText.getText().toString(),
+                eventLocationText.getText().toString(),
+                eventTimeText.getText().toString(),
+                eventCapacityText.getText().toString(),
+                eventRSVPList.getText().toString()
+        );
 
         Intent data = new Intent();
+        data.putExtra("currentEvent", this.gson.toJson(newEvent));
         data.putExtra("action", "add");
-        data.putExtra("eventTitle", eventTitleText.getText().toString());
-        data.putExtra("eventDescription", eventDescriptionText.getText().toString());
-        data.putExtra("eventLocation", eventLocationText.getText().toString());
-        data.putExtra("eventTime", eventTimeText.getText().toString());
-        data.putExtra("eventCapacity", eventCapacityText.getText().toString());
-        data.putExtra("RSVPList", eventRSVPList.getText().toString());
         setResult(RESULT_OK,data);
         finish();
     }

@@ -3,6 +3,8 @@ package com.example.campusdiscovery.ui.main;
 import static android.content.Context.MODE_APPEND;
 import static android.content.Context.MODE_PRIVATE;
 
+import static com.example.campusdiscovery.models.Status.NO_ATTEND;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -30,13 +32,18 @@ import com.example.campusdiscovery.activities.ViewEventActivity;
 import com.example.campusdiscovery.adapters.EventsAdapter;
 import com.example.campusdiscovery.interfaces.BtnClickListener;
 import com.example.campusdiscovery.interfaces.SpinnerListener;
+import com.example.campusdiscovery.models.Attendee;
 import com.example.campusdiscovery.models.Event;
+import com.example.campusdiscovery.models.Status;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -47,12 +54,18 @@ public class AllEventsFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String USERNAME = "";
-    private static final String USERTYPE = "";
+    private Attendee currentUser;
+
+    // gson
+    private Gson gson = new Gson();
 
     // current user information
     private String userName;
     private String userType;
+    private UUID userId;
+
+    // global user database
+    private Map<UUID, Attendee> userMap;
 
     // pagination variables and elements
     private int noOfBtns;
@@ -76,15 +89,12 @@ public class AllEventsFragment extends Fragment {
                 public void onActivityResult(ActivityResult result) {
                     if (result.getResultCode() == Activity.RESULT_OK) {
                         Intent data = result.getData();
-                        String eventTitle = data.getStringExtra("eventTitle");
-                        String eventDescription = data.getStringExtra("eventDescription");
-                        String eventLocation = data.getStringExtra("eventLocation");
-                        String eventTime = data.getStringExtra("eventTime");
+
+                        Event newEvent = gson.fromJson(data.getStringExtra("currentEvent"), Event.class);
                         String action = data.getStringExtra("action");
                         String RSVPList = data.getStringExtra("RSVPList");
                         int eventPosition = data.getIntExtra("eventPosition", -1);
-                        String eventCapacity = data.getStringExtra("eventCapacity");
-                        Event newEvent = new Event(eventTitle, eventDescription, eventLocation, eventTime, eventCapacity, getUserName(), RSVPList);
+
                         if (action.equals("add")) {
                             addEvent(newEvent);
                         } else if (action.equals("edit")) {
@@ -95,6 +105,8 @@ public class AllEventsFragment extends Fragment {
             }
     );
 
+
+
     public AllEventsFragment() {
         // Required empty public constructor
     }
@@ -103,16 +115,12 @@ public class AllEventsFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+     * @param args
      * @return A new instance of fragment AllEventsFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static AllEventsFragment newInstance(String userName, String userType) {
+    public static AllEventsFragment newInstance(Bundle args) {
         AllEventsFragment fragment = new AllEventsFragment();
-        Bundle args = new Bundle();
-        args.putString(USERNAME, userName);
-        args.putString(USERTYPE, userType);
         fragment.setArguments(args);
         return fragment;
     }
@@ -120,12 +128,12 @@ public class AllEventsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            userName = getArguments().getString(USERNAME);
-            userType = getArguments().getString(USERTYPE);
-        }
 
+        Type userMapType = new TypeToken<Map<UUID, Attendee>>() {}.getType();
 
+        // parse current user
+        this.currentUser = this.gson.fromJson(getArguments().getString("currentUser"), Attendee.class);
+        this.userMap = this.gson.fromJson(getArguments().getString("userMap"), userMapType);
     }
 
     @Override
@@ -165,12 +173,10 @@ public class AllEventsFragment extends Fragment {
              * @param status the resulting status clicked
              */
             @Override
-            public void onItemSelect(int position, int status) {
-                if (eventList.get(position).getRSVPList().contains(userName) || eventList.get(position).getRSVPList().contains("")) {
-                    editEventStatus(position, status);
-                }
+            public void onItemSelect(int position, Status status) {
+                editEventStatus(position, status);
             }
-        }, getUserName());
+        }, this.currentUser);
 
         this.eventListView.setAdapter(this.eventsAdapter);
         this.eventListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
@@ -214,13 +220,12 @@ public class AllEventsFragment extends Fragment {
      */
     public void openEditEventActivity(int position){
         Event currentEvent = this.eventList.get(position);
+        String currentEventJson = gson.toJson(currentEvent);
+
         Intent intent = new Intent(getActivity(), EditEventActivity.class);
-        intent.putExtra("eventTitle", currentEvent.getName());
-        intent.putExtra("eventDescription", currentEvent.getDescription());
-        intent.putExtra("eventLocation", currentEvent.getLocation());
-        intent.putExtra("eventTime", currentEvent.getTime());
+        intent.putExtra("currentEvent", currentEventJson);
         intent.putExtra("eventPosition", position);
-        intent.putExtra("eventCapacity", currentEvent.getCapacity());
+        intent.putExtra("eventAttendeeMap", this.gson.toJson(currentEvent.getAttendeeMap()));
         eventActivityResultLauncher.launch(intent);
     }
 
@@ -229,16 +234,14 @@ public class AllEventsFragment extends Fragment {
      * @param position the position of the target activity
      */
     public void openViewEventActivity(int position) {
-        System.out.println("Correct launch");
         Event currentEvent = this.eventList.get(position);
+        String currentEventJson = gson.toJson(currentEvent);
+        String userMapJson = gson.toJson(this.userMap);
+
         Intent intent = new Intent(getActivity(), ViewEventActivity.class);
-        intent.putExtra("eventTitle", currentEvent.getName());
-        intent.putExtra("eventDescription", currentEvent.getDescription());
-        intent.putExtra("eventLocation", currentEvent.getLocation());
-        intent.putExtra("eventTime", currentEvent.getTime());
+        intent.putExtra("currentEvent", currentEventJson);
+        intent.putExtra("userMap", userMapJson);
         intent.putExtra("eventPosition", position);
-        intent.putExtra("eventCapacity", currentEvent.getCapacity());
-        intent.putExtra("eventAttendees", currentEvent.getAttendees());
         eventActivityResultLauncher.launch(intent);
     }
 
@@ -249,7 +252,6 @@ public class AllEventsFragment extends Fragment {
         SharedPreferences sh = getActivity().getSharedPreferences("EventsPref", MODE_APPEND);
         String eventsPref = sh.getString("events", "");
 
-        Gson gson = new Gson();
         Type eventListType = new TypeToken<List<Event>>() {}.getType();
         if (eventsPref == "") {
             this.eventList = new ArrayList<Event>();
@@ -325,18 +327,17 @@ public class AllEventsFragment extends Fragment {
         this.loadEventPage(this.currentPage);
     }
 
-
-
-
-
-
-
     /**
      * Adds an event to the activities attribute, saves this to data, and calls for a refresh of
      * the events screen.
      * @param event the event to add
      */
     private void addEvent(Event event) {
+        // add current user attendee metadata (status and host)
+
+        event.setAttendee(this.currentUser.getId(), NO_ATTEND);
+        event.setHost(this.currentUser);
+
         this.eventList.add(event);
         this.updateEventsPref();
         this.eventsAdapter.notifyDataSetChanged();
@@ -352,7 +353,7 @@ public class AllEventsFragment extends Fragment {
      * @param position the position of the event to remove
      */
     private void deleteEvent(int position) {
-        if (this.eventList.get(position).getHost().equals(this.userName) || this.userType.equals("Organizer")) {
+        if (this.eventList.get(position).getHost().equals(this.currentUser) || this.userType.equals("Organizer")) {
             this.eventList.remove(position);
             this.updateEventsPref();
             this.eventsAdapter.notifyDataSetChanged();
@@ -380,9 +381,9 @@ public class AllEventsFragment extends Fragment {
      * @param position the position of the target event
      * @param status the current desired status of the event
      */
-    private void editEventStatus(int position, int status) {
+    private void editEventStatus(int position, Status status) {
         if (eventList.get(position).getRSVPList().contains(userName) || eventList.get(position).getRSVPList().contains("")) {
-            this.eventList.get(position).setStatus(getUserName(), status);
+            this.eventList.get(position).setAttendee(this.currentUser.getId(), status);
             this.updateEventsPref();
             System.out.println("status edited");
         }
@@ -394,8 +395,8 @@ public class AllEventsFragment extends Fragment {
     private void updateEventsPref() {
         SharedPreferences sh = getActivity().getSharedPreferences("EventsPref", MODE_PRIVATE);
         SharedPreferences.Editor prefsEditor = sh.edit();
-        Gson gson = new Gson();
-        String menuJson = gson.toJson(this.eventList);
+
+        String menuJson = this.gson.toJson(this.eventList);
         System.out.println(menuJson);
         prefsEditor.putString("events", menuJson);
         prefsEditor.commit();

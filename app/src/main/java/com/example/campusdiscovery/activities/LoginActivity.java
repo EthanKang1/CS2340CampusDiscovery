@@ -3,6 +3,7 @@ package com.example.campusdiscovery.activities;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -13,6 +14,17 @@ import android.widget.Toast;
 
 import com.example.campusdiscovery.EventActivityNew;
 import com.example.campusdiscovery.R;
+import com.example.campusdiscovery.models.Attendee;
+import com.example.campusdiscovery.models.Event;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 public class LoginActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
@@ -52,13 +64,63 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
         EditText userNameText = findViewById(R.id.userName);
         Spinner userTypeSpinner = (Spinner) findViewById(R.id.userType);
 
-        if (userNameText.getText().toString().trim().matches("")) {
+        String userName = userNameText.getText().toString();
+        String userType = userTypeSpinner.getSelectedItem().toString();
+
+        if (userName.trim().matches("")) {
             Toast.makeText(this, "Please provide a username", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        intent.putExtra("userName", userNameText.getText().toString());
-        intent.putExtra("userType", userTypeSpinner.getSelectedItem().toString());
+        // load user list
+        SharedPreferences sh = this.getSharedPreferences("UsersPref", MODE_APPEND);
+        String usersPref = sh.getString("users", "");
+        Gson gson = new Gson();
+        Type userMapType = new TypeToken<Map<UUID, Attendee>>() {}.getType();
+        Map<UUID, Attendee> userMap = new HashMap<UUID, Attendee>();
+        if (usersPref != "") {
+            userMap = gson.fromJson(usersPref, userMapType);
+        }
+
+        // generate UUID if user does not exist
+        Attendee currentUser = null;
+        System.out.println("Comparing login: " + userName);
+        for (Attendee user : userMap.values()) {
+            System.out.println(user.getName());
+            if (user.getName().equals(userName)) {
+                System.out.println("MATCH");
+                currentUser = user;
+                break;
+            }
+        }
+        if (currentUser == null) {
+            System.out.println("User not found, creating...");
+            currentUser = new Attendee(userName);
+
+            userMap.put(currentUser.getId(), currentUser);
+        }
+        System.out.println(currentUser);
+
+        // push user list
+        sh = this.getSharedPreferences("UsersPref", MODE_PRIVATE);
+        SharedPreferences.Editor prefsEditor = sh.edit();
+        String userMapJson = gson.toJson(userMap);
+        prefsEditor.putString("users", userMapJson);
+        prefsEditor.commit();
+
+        // Convert Attendee class to string
+        String currentUserJson = gson.toJson(currentUser);
+
+        // build arguments
+        intent.putExtra("currentUser", currentUserJson);
+        intent.putExtra("userMap", userMapJson);
+
+//        // build arguments
+//        intent.putExtra("userName", userName);
+//        intent.putExtra("userType", userType);
+//        intent.putExtra("userId", userId);
+
+        // launch activity
         startActivity(intent);
     }
 }

@@ -1,17 +1,55 @@
 package com.example.campusdiscovery.activities;
 
-import android.content.Intent;
+import static com.example.campusdiscovery.models.Status.ATTEND;
+
 import android.os.Bundle;
 import android.view.View;
-import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.campusdiscovery.R;
+import com.example.campusdiscovery.adapters.AttendeesAdapter;
+import com.example.campusdiscovery.databinding.ActivityViewEventBinding;
+import com.example.campusdiscovery.interfaces.BtnClickListener;
+import com.example.campusdiscovery.models.Attendee;
+import com.example.campusdiscovery.models.Event;
+import com.example.campusdiscovery.models.Status;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 public class ViewEventActivity extends AppCompatActivity {
+
+    private ActivityViewEventBinding binding;
+
+
+    private AttendeesAdapter attendeesAdapter;
+
+    private Map<UUID, Integer> eventAttendeeMap = new HashMap<UUID, Integer>();
+
+    private Map<String, Integer> eventStatus;
+    private Event currentEvent;
+    private Map<UUID, Attendee> userMap;
+
+    // UI Elements
+    private TextView eventTitleText;
+    private TextView eventDescriptionText;
+    private TextView eventLocationText;
+    private TextView eventTimeText;
+    private TextView eventCapacityText;
+    private TextView eventAttendeesText;
+    private ListView attendeeListView;
+
+    // handles types of status
+    private List<Attendee> attendeeListPage = new ArrayList<Attendee>();
 
     /**
      * Initializes the new activity.
@@ -23,28 +61,36 @@ public class ViewEventActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_event);
 
+        // Load arguments
+        Gson gson = new Gson();
         Bundle extras = getIntent().getExtras();
+        Type userMapType = new TypeToken<Map<UUID, Attendee>>() {}.getType();
+        this.currentEvent = gson.fromJson(extras.getString("currentEvent"), Event.class);
+        this.userMap = gson.fromJson(extras.getString("userMap"), userMapType);
 
-        String eventTitle = extras.getString("eventTitle");
-        String eventDescription = extras.getString("eventDescription");
-        String eventLocation = extras.getString("eventLocation");
-        String eventTime = extras.getString("eventTime");
-        String eventCapacity = extras.getString("eventCapacity");
-        String eventAttendees = extras.getString("eventAttendees");
+        // Get UI elements
+        this.eventTitleText = findViewById(R.id.eventTitle);
+        this.eventDescriptionText = findViewById(R.id.eventDescription);
+        this.eventLocationText = findViewById(R.id.eventLocation);
+        this.eventTimeText = findViewById(R.id.eventTime);
+        this.eventCapacityText = findViewById(R.id.eventCapacity);
+        this.eventAttendeesText = findViewById(R.id.eventAttendees);
+        this.attendeeListView = (ListView) findViewById(R.id.attendeeListView);
 
-        TextView eventTitleText = findViewById(R.id.eventTitle);
-        TextView eventDescriptionText = findViewById(R.id.eventDescription);
-        TextView eventLocationText = findViewById(R.id.eventLocation);
-        TextView eventTimeText = findViewById(R.id.eventTime);
-        TextView eventCapacityText = findViewById(R.id.eventCapacity);
-        TextView eventAttendeesText = findViewById(R.id.eventAttendees);
+        // Set default text values
+        this.eventTitleText.setText(this.currentEvent.getName());
+        this.eventDescriptionText.setText(this.currentEvent.getDescription());
+        this.eventLocationText.setText(this.currentEvent.getLocation());
+        this.eventTimeText.setText(this.currentEvent.getTime());
+        this.eventCapacityText.setText(this.currentEvent.getCapacity());
+        this.eventAttendeesText.setText(this.currentEvent.getAttendees());
 
-        eventTitleText.setText(eventTitle);
-        eventDescriptionText.setText(eventDescription);
-        eventLocationText.setText(eventLocation);
-        eventTimeText.setText(eventTime);
-        eventCapacityText.setText(eventCapacity);
-        eventAttendeesText.setText(eventAttendees);
+        // initialize attendee adapter
+        this.attendeesAdapter = new AttendeesAdapter(this,
+                                                    this.attendeeListPage);
+        this.attendeeListView.setAdapter(attendeesAdapter);
+
+        this.loadAttendees(ATTEND);
     }
 
     /**
@@ -53,6 +99,21 @@ public class ViewEventActivity extends AppCompatActivity {
      */
     public void backClick(View view) {
         finish();
+    }
+
+    private void loadAttendees(Status status) {
+        this.attendeeListPage.clear();
+        System.out.println("Analayzing attendees");
+        for (Map.Entry<UUID,Status> entry : this.currentEvent.getAttendeeMap().entrySet()) {
+            UUID currentId = entry.getKey();
+            Status currentStatus = entry.getValue();
+
+            if (currentStatus.equals(status)) {
+                this.attendeeListPage.add(this.userMap.get(currentId));
+            }
+        }
+
+        this.attendeesAdapter.notifyDataSetChanged();
     }
 
 

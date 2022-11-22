@@ -1,5 +1,6 @@
 package com.example.campusdiscovery.models;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -12,24 +13,30 @@ public class Event {
     private String description;
     private String location;
     private String time;
-    private String host;
     private String RSVPList;
     private String capacity;
     private Map<String, Integer> statusMap = new HashMap<String, Integer>();
     private final int DEFAULT_STATUS = 2;
     private final int BAD_DEFAULT_STATUS = 0;
 
-    public Event(String name, String description, String location, String time, String capacity, String host, String RSVPList) {
+    private Attendee host;
+
+    // development
+    private Map<UUID, Status> attendeeMap = new HashMap<UUID, Status>();
+
+    public Event(String name, String description, String location, String time, String capacity, String RSVPList) {
         this.id = UUID.randomUUID();
         this.name = name;
         this.description = description;
         this.location = location;
         this.time = time;
-        this.host = host;
         this.capacity = capacity;
         this.RSVPList = RSVPList;
+        this.host = null;
     }
 
+
+    // Getter methods
     public UUID getId() {
         return this.id;
     }
@@ -50,29 +57,33 @@ public class Event {
         return this.time;
     }
 
-    public String getHost() {
-        return this.host;
+    public String getCapacity() {
+        return capacity;
     }
 
-    public int getStatus(String username) {
-        if (username == null) {
-            return -1;
-        }
-      
-        if (this.RSVPList == null) {
-            this.RSVPList = "";
-        }
-        List<String> RSVPList1 = Arrays.asList(this.RSVPList.split(","));
-        if ((RSVPList1.contains(username) || RSVPList1.contains("") || username.equals(this.host)) && this.statusMap.get(username) == null) {
-            this.setStatus(username, DEFAULT_STATUS);
-            return this.statusMap.get(username);
-        }
-        if (this.statusMap.get(username) == null) {
-            this.setStatus(username, BAD_DEFAULT_STATUS);
-        }
-        return this.statusMap.get(username);
+    // Setter methods
+    public void setName(String name) {
+        this.name = name;
     }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public void setCapacity(String capacity) {
+        this.capacity = capacity;
+    }
+
+
+    // breaker
     public List<String> getRSVPList() {
         if (this.RSVPList == null) {
             this.RSVPList = "";
@@ -87,8 +98,10 @@ public class Event {
         }
         this.statusMap.put(username, status);
     }
-    public String getCapacity() {
-        return capacity;
+
+
+    public Map<String, Integer> getStatusMap() {
+        return statusMap;
     }
 
     public String getAttendees() {
@@ -101,5 +114,26 @@ public class Event {
             }
         }
         return Integer.toString(attendees);
+    }
+
+    public Map<UUID, Status> getAttendeeMap() {
+        return attendeeMap;
+    }
+
+    public Status getAttendeeStatus(Attendee attendee) {
+        return this.attendeeMap.get(attendee.getId());
+    }
+
+    public void setAttendee(UUID attendeeId, Status status) {
+        this.attendeeMap.put(attendeeId, status);
+        System.out.println(this.attendeeMap);
+    }
+
+    public void setHost(Attendee attendee) {
+        this.host = attendee;
+    }
+
+    public Attendee getHost() {
+        return host;
     }
 }

@@ -12,7 +12,7 @@
         android:layout_height="100dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/eventLayout"
+            android:id="@+id/attendeeLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:descendantFocusability="blocksDescendants"
@@ -20,7 +20,7 @@
             app:layout_constraintTop_toTopOf="@+id/eventLocation">
 
             <TextView
-                android:id="@+id/eventName"
+                android:id="@+id/attendeeName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
@@ -41,7 +41,7 @@
                 app:layout_constraintEnd_toEndOf="@id/eventTime"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/eventName"
+                app:layout_constraintTop_toBottomOf="@+id/attendeeName"
                 app:layout_constraintVertical_bias="0.0" />
 
             <TextView
@@ -101,7 +101,7 @@
                 android:gravity="center_vertical"
                 android:text="eventTime"
                 app:layout_constraintBottom_toTopOf="@+id/eventDescription"
-                app:layout_constraintStart_toEndOf="@+id/eventName"
+                app:layout_constraintStart_toEndOf="@+id/attendeeName"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Button

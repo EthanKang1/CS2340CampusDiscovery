@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:text="eventTitle"
-        android:textSize="28sp"
+        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="@+id/textView10"
         app:layout_constraintStart_toStartOf="@+id/textView10"
         app:layout_constraintTop_toBottomOf="@+id/textView10" />
@@ -32,8 +32,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="eventDescription"
-        android:textSize="28sp"
-        app:layout_constraintEnd_toEndOf="@+id/eventTitle"
+        android:textSize="22sp"
+        app:layout_constraintEnd_toEndOf="@+id/textView11"
         app:layout_constraintStart_toStartOf="@+id/eventTitle"
         app:layout_constraintTop_toBottomOf="@+id/textView11" />
 
@@ -41,10 +41,11 @@
         android:id="@+id/eventLocation"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
         android:text="eventLocation"
-        android:textSize="28sp"
-        app:layout_constraintEnd_toEndOf="@+id/eventDescription"
-        app:layout_constraintStart_toStartOf="@+id/eventDescription"
+        android:textSize="22sp"
+        app:layout_constraintEnd_toEndOf="@+id/textView12"
+        app:layout_constraintStart_toStartOf="@+id/textView12"
         app:layout_constraintTop_toBottomOf="@+id/textView12" />
 
     <TextView
@@ -52,10 +53,21 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="eventTime"
-        android:textSize="28sp"
+        android:textSize="22sp"
         app:layout_constraintEnd_toEndOf="@+id/eventLocation"
         app:layout_constraintStart_toStartOf="@+id/eventLocation"
         app:layout_constraintTop_toBottomOf="@+id/textView13" />
+
+    <TextView
+        android:id="@+id/eventTime2"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:gravity="center_vertical"
+        android:text="View as:"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView16"
+        app:layout_constraintEnd_toStartOf="@+id/spinner"
+        app:layout_constraintTop_toTopOf="@+id/textView16" />
 
     <TextView
         android:id="@+id/eventAttendees"
@@ -63,8 +75,8 @@
         android:layout_height="wrap_content"
         android:text="999"
         android:textAlignment="center"
-        android:textSize="28sp"
-        app:layout_constraintStart_toStartOf="@+id/eventTime"
+        android:textSize="22sp"
+        app:layout_constraintStart_toStartOf="@+id/eventDescription"
         app:layout_constraintTop_toBottomOf="@+id/textView9" />
 
     <TextView
@@ -73,7 +85,7 @@
         android:layout_height="wrap_content"
         android:text="999"
         android:textAlignment="center"
-        android:textSize="28sp"
+        android:textSize="22sp"
         app:layout_constraintBottom_toBottomOf="@+id/textView5"
         app:layout_constraintStart_toEndOf="@+id/textView5"
         app:layout_constraintTop_toTopOf="@+id/textView5" />
@@ -84,7 +96,7 @@
         android:layout_height="wrap_content"
         android:text="/"
         android:textAlignment="center"
-        android:textSize="28sp"
+        android:textSize="22sp"
         app:layout_constraintBottom_toBottomOf="@+id/eventAttendees"
         app:layout_constraintStart_toEndOf="@+id/eventAttendees"
         app:layout_constraintTop_toTopOf="@+id/eventAttendees"
@@ -99,26 +111,39 @@
         android:text="Capacity"
         android:textAlignment="viewStart"
         android:textColor="@color/tech_gold"
-        android:textSize="28sp"
+        android:textSize="24sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/textView13"
-        app:layout_constraintTop_toBottomOf="@+id/eventTime" />
+        app:layout_constraintStart_toStartOf="@+id/textView11"
+        app:layout_constraintTop_toBottomOf="@+id/eventDescription" />
 
     <TextView
         android:id="@+id/textView10"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="40dp"
+        android:layout_marginTop="30dp"
         android:fontFamily="@font/roboto"
         android:text="Title"
         android:textColor="@color/tech_gold"
-        android:textSize="28sp"
+        android:textSize="26sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/textView14"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView14" />
+
+    <TextView
+        android:id="@+id/textView16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="50dp"
+        android:fontFamily="@font/roboto"
+        android:text="Attendees"
+        android:textColor="@color/tech_gold"
+        android:textSize="26sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/eventAttendees" />
 
     <TextView
         android:id="@+id/textView14"
@@ -139,47 +164,63 @@
 
     <TextView
         android:id="@+id/textView11"
-        android:layout_width="0dp"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:fontFamily="@font/roboto"
         android:text="Description"
         android:textAlignment="textStart"
         android:textColor="@color/tech_gold"
-        android:textSize="28sp"
+        android:textSize="24sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/textView10"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/textView10"
         app:layout_constraintTop_toBottomOf="@+id/eventTitle" />
 
     <TextView
         android:id="@+id/textView12"
-        android:layout_width="0dp"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginEnd="40dp"
         android:fontFamily="@font/roboto"
         android:text="Location"
         android:textColor="@color/tech_gold"
-        android:textSize="28sp"
+        android:textSize="24sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/textView11"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/textView11"
-        app:layout_constraintTop_toBottomOf="@+id/eventDescription" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textView11" />
 
     <TextView
         android:id="@+id/textView13"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
         android:fontFamily="@font/roboto"
         android:text="Time"
         android:textColor="@color/tech_gold"
-        android:textSize="28sp"
+        android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/textView12"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/textView12"
-        app:layout_constraintTop_toBottomOf="@+id/eventLocation" />
+        app:layout_constraintTop_toTopOf="@+id/textView9" />
+
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="100dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="40dp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView16"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textView16" />
+
+    <ListView
+        android:id="@+id/attendeeListView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/button4"
+        app:layout_constraintEnd_toEndOf="@+id/spinner"
+        app:layout_constraintStart_toStartOf="@+id/textView16"
+        app:layout_constraintTop_toBottomOf="@+id/eventTime2" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
