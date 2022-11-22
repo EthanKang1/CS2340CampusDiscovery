@@ -46,33 +46,34 @@ public class EventsAdapter extends ArrayAdapter<Event>{
 
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_event, parent, false);
-
         }
+
+        // Get UI elements
+        // text
+        TextView eventName = (TextView) convertView.findViewById(R.id.attendeeName);
+        TextView eventDescription = (TextView) convertView.findViewById(R.id.eventDescription);
+        TextView eventTime = (TextView) convertView.findViewById(R.id.eventTime);
+        TextView eventLocation = (TextView) convertView.findViewById(R.id.eventLocation);
+        TextView eventHost = (TextView) convertView.findViewById(R.id.eventHost);
+        TextView eventCapacity = (TextView) convertView.findViewById((R.id.eventCapacity));
+        TextView eventAttendees = (TextView) convertView.findViewById(R.id.eventAttendees);
+        // buttons
         Button deleteButton = (Button) convertView.findViewById(R.id.delete);
         Button editButton = (Button) convertView.findViewById(R.id.edit);
-        TextView eventName = (TextView) convertView.findViewById(R.id.attendeeName);
-        eventName.setText(event.getName());
-        TextView eventDescription = (TextView) convertView.findViewById(R.id.eventDescription);
-        eventDescription.setText(event.getDescription());
-        TextView eventTime = (TextView) convertView.findViewById(R.id.eventTime);
-        eventTime.setText(event.getTime());
-        TextView eventLocation = (TextView) convertView.findViewById(R.id.eventLocation);
-        eventLocation.setText(event.getLocation());
-        TextView eventHost = (TextView) convertView.findViewById(R.id.eventHost);
-        eventHost.setText("Hosted by " + event.getHost());
-        TextView eventCapacity = (TextView) convertView.findViewById((R.id.eventCapacity));
-        eventCapacity.setText(event.getCapacity());
-        TextView eventAttendees = (TextView) convertView.findViewById(R.id.eventAttendees);
-        eventAttendees.setText(event.getAttendees());
-        deleteButton.setTag(position);
-        deleteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(mClickListener != null)
-                    mClickListener.onBtnClick((Integer) view.getTag(), "delete");
-            }
-        });
+        // spinner
+        Spinner statusSpinner = (Spinner) convertView.findViewById(R.id.statusSpinner);
 
+        // Set default text values
+        eventName.setText(event.getName());
+        eventDescription.setText(event.getDescription());
+        eventTime.setText(event.getTime());
+        eventLocation.setText(event.getLocation());
+        eventHost.setText("Hosted by " + event.getHost());
+        eventCapacity.setText(event.getCapacity());
+        eventAttendees.setText(event.getAttendees());
+
+        // Set interactive component functionality
+        // edit button
         editButton.setTag(position);
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,44 +82,30 @@ public class EventsAdapter extends ArrayAdapter<Event>{
                     mClickListener.onBtnClick((Integer) view.getTag(), "edit");
             }
         });
-
-        // Status dropdown
-        Spinner statusSpinner = (Spinner) convertView.findViewById(R.id.statusSpinner);
-//        statusSpinner.setOnItemSelectedListener(this);
+        // delete button
+        deleteButton.setTag(position);
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(mClickListener != null)
+                    mClickListener.onBtnClick((Integer) view.getTag(), "delete");
+            }
+        });
+        // status spinner
         ArrayAdapter<String> statusAdapter = new ArrayAdapter<String>(this.context, android.R.layout.simple_spinner_item, Status.getStrings());
-        System.out.println("Setting status ");
-        System.out.println(event.getAttendeeStatus(this.currentUser));
-
-//        ArrayAdapter<String> badStatusAdapter = new ArrayAdapter<String>(this.context, android.R.layout.simple_spinner_item, this.badStatuses);
-//        if (event.getRSVPList().contains(this.username) || event.getRSVPList().contains("") || this.username.equals(event.getHost())) {
-//            statusSpinner.setAdapter(statusAdapter);
-//        } else {
-//            statusSpinner.setAdapter(badStatusAdapter);
-//        }
         statusSpinner.setAdapter(statusAdapter);
-        Integer currentUserStatusPerEvent = event.getAttendeeStatus(this.currentUser);
-        if (currentUserStatusPerEvent != null) {
-            statusSpinner.setSelection(currentUserStatusPerEvent);
+        if (event.getAttendeeStatus(this.currentUser) != null) {
+            statusSpinner.setSelection(event.getAttendeeStatus(this.currentUser));
         } else {
             statusSpinner.setSelection(statusAdapter.getPosition(NO_ATTEND.toString()));
         }
-
-
-//        statusSpinner.setSelection(event.getStatus(this.username));
         statusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View arg1, int arg2, long arg3) {
-//                System.out.println(position);
-//                System.out.println(parent.getItemAtPosition(arg2).toString());
                 spinnerListener.onItemSelect(position, arg2);
-
-
             }
-
             @Override
-            public void onNothingSelected(AdapterView<?> arg0) {
-            }
-
+            public void onNothingSelected(AdapterView<?> arg0) { }
         });
 
         return convertView;
