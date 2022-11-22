@@ -75,7 +75,7 @@ public class EditEventActivity extends AppCompatActivity {
         currentEvent.setDescription(this.eventDescriptionText.getText().toString());
         currentEvent.setLocation(this.eventLocationText.getText().toString());
         currentEvent.setTime(this.eventTimeText.getText().toString());
-        currentEvent.setCapacity(this.eventCapacityText.getText().toString());
+        currentEvent.setCapacity(Integer.parseInt("0" + this.eventCapacityText.getText().toString()));
 
         Intent data = new Intent();
 

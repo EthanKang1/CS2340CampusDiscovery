@@ -89,7 +89,7 @@ public class ViewEventActivity extends AppCompatActivity {
         this.eventDescriptionText.setText(this.currentEvent.getDescription());
         this.eventLocationText.setText(this.currentEvent.getLocation());
         this.eventTimeText.setText(this.currentEvent.getTime());
-        this.eventCapacityText.setText(this.currentEvent.getCapacity());
+        this.eventCapacityText.setText(Integer.toString(this.currentEvent.getCapacity()));
         this.eventAttendeesText.setText(this.currentEvent.getAttendees());
 
         // initialize attendee adapter

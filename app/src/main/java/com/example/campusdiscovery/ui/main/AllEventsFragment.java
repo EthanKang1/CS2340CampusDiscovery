@@ -383,9 +383,12 @@ public class AllEventsFragment extends Fragment {
      */
     private void editEventStatus(int position, Status status) {
         if (eventList.get(position).getRSVPList().contains(userName) || eventList.get(position).getRSVPList().contains("")) {
-            this.eventList.get(position).setAttendee(this.currentUser.getId(), status);
-            this.updateEventsPref();
-            System.out.println("status edited");
+            if (this.eventList.get(position).getAttendeeStatus(this.currentUser) == null || !this.eventList.get(position).getAttendeeStatus(this.currentUser).equals(status)) {
+                this.eventList.get(position).setAttendee(this.currentUser.getId(), status);
+                this.updateEventsPref();
+                this.eventsAdapter.notifyDataSetChanged();
+                System.out.println("status edited");
+            }
         }
     }
 
