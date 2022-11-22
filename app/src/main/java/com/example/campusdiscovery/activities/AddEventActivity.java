@@ -64,7 +64,7 @@ public class AddEventActivity extends AppCompatActivity {
                 eventDescriptionText.getText().toString(),
                 eventLocationText.getText().toString(),
                 eventTimeText.getText().toString(),
-                eventCapacityText.getText().toString(),
+                Integer.parseInt("0" + eventCapacityText.getText().toString()),
                 eventRSVPList.getText().toString()
         );
 

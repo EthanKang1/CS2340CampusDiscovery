@@ -1,5 +1,6 @@
 package com.example.campusdiscovery.adapters;
 
+import static com.example.campusdiscovery.models.Status.ATTEND;
 import static com.example.campusdiscovery.models.Status.NO_ATTEND;
 
 import android.content.Context;
@@ -20,6 +21,7 @@ import com.example.campusdiscovery.interfaces.SpinnerListener;
 import com.example.campusdiscovery.models.Status;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class EventsAdapter extends ArrayAdapter<Event>{
@@ -69,8 +71,8 @@ public class EventsAdapter extends ArrayAdapter<Event>{
         eventTime.setText(event.getTime());
         eventLocation.setText(event.getLocation());
         eventHost.setText("Hosted by " + event.getHost().getName());
-        eventCapacity.setText(event.getCapacity());
-        eventAttendees.setText(event.getAttendees());
+        eventCapacity.setText(Integer.toString(event.getCapacity()));
+        eventAttendees.setText(Integer.toString(Collections.frequency(event.getAttendeeMap().values(), ATTEND)));
 
         // Set interactive component functionality
         // edit button

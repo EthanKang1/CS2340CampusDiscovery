@@ -14,7 +14,7 @@ public class Event {
     private String location;
     private String time;
     private String RSVPList;
-    private String capacity;
+    private int capacity;
     private Map<String, Integer> statusMap = new HashMap<String, Integer>();
     private final int DEFAULT_STATUS = 2;
     private final int BAD_DEFAULT_STATUS = 0;
@@ -24,7 +24,12 @@ public class Event {
     // development
     private Map<UUID, Status> attendeeMap = new HashMap<UUID, Status>();
 
-    public Event(String name, String description, String location, String time, String capacity, String RSVPList) {
+    public Event(String name,
+                 String description,
+                 String location,
+                 String time,
+                 int capacity,
+                 String RSVPList) {
         this.id = UUID.randomUUID();
         this.name = name;
         this.description = description;
@@ -57,7 +62,7 @@ public class Event {
         return this.time;
     }
 
-    public String getCapacity() {
+    public int getCapacity() {
         return capacity;
     }
 
@@ -78,7 +83,7 @@ public class Event {
         this.time = time;
     }
 
-    public void setCapacity(String capacity) {
+    public void setCapacity(int capacity) {
         this.capacity = capacity;
     }
 
