@@ -34,6 +34,7 @@ import com.example.campusdiscovery.interfaces.BtnClickListener;
 import com.example.campusdiscovery.interfaces.SpinnerListener;
 import com.example.campusdiscovery.models.Attendee;
 import com.example.campusdiscovery.models.Event;
+import com.example.campusdiscovery.models.Status;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -62,6 +63,9 @@ public class AllEventsFragment extends Fragment {
     private String userName;
     private String userType;
     private UUID userId;
+
+    // global user database
+    private Map<UUID, Attendee> userMap;
 
     // pagination variables and elements
     private int noOfBtns;
@@ -125,8 +129,11 @@ public class AllEventsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        Type userMapType = new TypeToken<Map<UUID, Attendee>>() {}.getType();
+
         // parse current user
         this.currentUser = this.gson.fromJson(getArguments().getString("currentUser"), Attendee.class);
+        this.userMap = this.gson.fromJson(getArguments().getString("userMap"), userMapType);
     }
 
     @Override
@@ -166,7 +173,7 @@ public class AllEventsFragment extends Fragment {
              * @param status the resulting status clicked
              */
             @Override
-            public void onItemSelect(int position, int status) {
+            public void onItemSelect(int position, Status status) {
                 editEventStatus(position, status);
             }
         }, this.currentUser);
@@ -229,9 +236,11 @@ public class AllEventsFragment extends Fragment {
     public void openViewEventActivity(int position) {
         Event currentEvent = this.eventList.get(position);
         String currentEventJson = gson.toJson(currentEvent);
+        String userMapJson = gson.toJson(this.userMap);
 
         Intent intent = new Intent(getActivity(), ViewEventActivity.class);
         intent.putExtra("currentEvent", currentEventJson);
+        intent.putExtra("userMap", userMapJson);
         intent.putExtra("eventPosition", position);
         eventActivityResultLauncher.launch(intent);
     }
@@ -318,12 +327,6 @@ public class AllEventsFragment extends Fragment {
         this.loadEventPage(this.currentPage);
     }
 
-
-
-
-
-
-
     /**
      * Adds an event to the activities attribute, saves this to data, and calls for a refresh of
      * the events screen.
@@ -332,7 +335,7 @@ public class AllEventsFragment extends Fragment {
     private void addEvent(Event event) {
         // add current user attendee metadata (status and host)
 
-        event.setAttendee(this.currentUser.getId(), 2);
+        event.setAttendee(this.currentUser.getId(), NO_ATTEND);
         event.setHost(this.currentUser);
 
         this.eventList.add(event);
@@ -378,7 +381,7 @@ public class AllEventsFragment extends Fragment {
      * @param position the position of the target event
      * @param status the current desired status of the event
      */
-    private void editEventStatus(int position, int status) {
+    private void editEventStatus(int position, Status status) {
         if (eventList.get(position).getRSVPList().contains(userName) || eventList.get(position).getRSVPList().contains("")) {
             this.eventList.get(position).setAttendee(this.currentUser.getId(), status);
             this.updateEventsPref();

@@ -104,8 +104,8 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
         // push user list
         sh = this.getSharedPreferences("UsersPref", MODE_PRIVATE);
         SharedPreferences.Editor prefsEditor = sh.edit();
-        String userJson = gson.toJson(userMap);
-        prefsEditor.putString("users", userJson);
+        String userMapJson = gson.toJson(userMap);
+        prefsEditor.putString("users", userMapJson);
         prefsEditor.commit();
 
         // Convert Attendee class to string
@@ -113,6 +113,7 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
 
         // build arguments
         intent.putExtra("currentUser", currentUserJson);
+        intent.putExtra("userMap", userMapJson);
 
 //        // build arguments
 //        intent.putExtra("userName", userName);

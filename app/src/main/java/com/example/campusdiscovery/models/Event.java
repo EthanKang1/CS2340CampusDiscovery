@@ -22,7 +22,7 @@ public class Event {
     private Attendee host;
 
     // development
-    private Map<UUID, Integer> attendeeMap = new HashMap<UUID, Integer>();
+    private Map<UUID, Status> attendeeMap = new HashMap<UUID, Status>();
 
     public Event(String name, String description, String location, String time, String capacity, String RSVPList) {
         this.id = UUID.randomUUID();
@@ -116,15 +116,15 @@ public class Event {
         return Integer.toString(attendees);
     }
 
-    public Map<UUID, Integer> getAttendeeMap() {
+    public Map<UUID, Status> getAttendeeMap() {
         return attendeeMap;
     }
 
-    public Integer getAttendeeStatus(Attendee attendee) {
+    public Status getAttendeeStatus(Attendee attendee) {
         return this.attendeeMap.get(attendee.getId());
     }
 
-    public void setAttendee(UUID attendeeId, Integer status) {
+    public void setAttendee(UUID attendeeId, Status status) {
         this.attendeeMap.put(attendeeId, status);
         System.out.println(this.attendeeMap);
     }

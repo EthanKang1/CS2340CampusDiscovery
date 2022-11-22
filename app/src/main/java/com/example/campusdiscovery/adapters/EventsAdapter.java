@@ -95,14 +95,14 @@ public class EventsAdapter extends ArrayAdapter<Event>{
         ArrayAdapter<String> statusAdapter = new ArrayAdapter<String>(this.context, android.R.layout.simple_spinner_item, Status.getStrings());
         statusSpinner.setAdapter(statusAdapter);
         if (event.getAttendeeStatus(this.currentUser) != null) {
-            statusSpinner.setSelection(event.getAttendeeStatus(this.currentUser));
+            statusSpinner.setSelection(statusAdapter.getPosition(event.getAttendeeStatus(this.currentUser).toString()));
         } else {
             statusSpinner.setSelection(statusAdapter.getPosition(NO_ATTEND.toString()));
         }
         statusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View arg1, int arg2, long arg3) {
-                spinnerListener.onItemSelect(position, arg2);
+                spinnerListener.onItemSelect(position, Status.valueOf(statusSpinner.getItemAtPosition(arg2).toString()));
             }
             @Override
             public void onNothingSelected(AdapterView<?> arg0) { }
@@ -110,14 +110,5 @@ public class EventsAdapter extends ArrayAdapter<Event>{
 
         return convertView;
     }
-
-//    @Override
-//    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//        System.out.println(parent.getItemAtPosition(position).toString());
-//        System.out.println(this.context);
-////        this.spinnerListener.onItemSelect((Integer) view.getTag(), parent.getItemAtPosition(position).toString());
-//    }
-//    @Override
-//    public void onNothingSelected(AdapterView<?> parent) { }
 }
 

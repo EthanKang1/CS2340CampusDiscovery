@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".EventActivityNew">
+    tools:context=".activities.ViewEventActivity">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -21,7 +21,7 @@
 
             <TextView
                 android:id="@+id/attendeeName"
-                android:layout_width="wrap_content"
+                android:layout_width="200dp"
                 android:layout_height="0dp"
                 android:gravity="center_vertical"
                 android:text="eventName"
@@ -37,7 +37,9 @@
                 android:text="Delete"
                 android:textSize="10sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                tools:layout_editor_absoluteX="331dp" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="1.0" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

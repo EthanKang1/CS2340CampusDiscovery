@@ -30,14 +30,26 @@ public class ViewEventActivity extends AppCompatActivity {
 
     private ActivityViewEventBinding binding;
 
-    private ListView attendeeListView;
+
     private AttendeesAdapter attendeesAdapter;
 
     private Map<UUID, Integer> eventAttendeeMap = new HashMap<UUID, Integer>();
-    private List<Attendee> attendeeList = new ArrayList<Attendee>();
 
     private Map<String, Integer> eventStatus;
     private Event currentEvent;
+    private Map<UUID, Attendee> userMap;
+
+    // UI Elements
+    private TextView eventTitleText;
+    private TextView eventDescriptionText;
+    private TextView eventLocationText;
+    private TextView eventTimeText;
+    private TextView eventCapacityText;
+    private TextView eventAttendeesText;
+    private ListView attendeeListView;
+
+    // handles types of status
+    private List<Attendee> attendeeListPage = new ArrayList<Attendee>();
 
     /**
      * Initializes the new activity.
@@ -49,43 +61,34 @@ public class ViewEventActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_event);
 
-
-
         // Load arguments
         Gson gson = new Gson();
         Bundle extras = getIntent().getExtras();
+        Type userMapType = new TypeToken<Map<UUID, Attendee>>() {}.getType();
         this.currentEvent = gson.fromJson(extras.getString("currentEvent"), Event.class);
+        this.userMap = gson.fromJson(extras.getString("userMap"), userMapType);
 
         // Get UI elements
-        TextView eventTitleText = findViewById(R.id.eventTitle);
-        TextView eventDescriptionText = findViewById(R.id.eventDescription);
-        TextView eventLocationText = findViewById(R.id.eventLocation);
-        TextView eventTimeText = findViewById(R.id.eventTime);
-        TextView eventCapacityText = findViewById(R.id.eventCapacity);
-        TextView eventAttendeesText = findViewById(R.id.eventAttendees);
-
-        // Set default text values
-        eventTitleText.setText(this.currentEvent.getName());
-        eventDescriptionText.setText(this.currentEvent.getDescription());
-        eventLocationText.setText(this.currentEvent.getLocation());
-        eventTimeText.setText(this.currentEvent.getTime());
-        eventCapacityText.setText(this.currentEvent.getCapacity());
-        eventAttendeesText.setText(this.currentEvent.getAttendees());
-
+        this.eventTitleText = findViewById(R.id.eventTitle);
+        this.eventDescriptionText = findViewById(R.id.eventDescription);
+        this.eventLocationText = findViewById(R.id.eventLocation);
+        this.eventTimeText = findViewById(R.id.eventTime);
+        this.eventCapacityText = findViewById(R.id.eventCapacity);
+        this.eventAttendeesText = findViewById(R.id.eventAttendees);
         this.attendeeListView = (ListView) findViewById(R.id.attendeeListView);
 
+        // Set default text values
+        this.eventTitleText.setText(this.currentEvent.getName());
+        this.eventDescriptionText.setText(this.currentEvent.getDescription());
+        this.eventLocationText.setText(this.currentEvent.getLocation());
+        this.eventTimeText.setText(this.currentEvent.getTime());
+        this.eventCapacityText.setText(this.currentEvent.getCapacity());
+        this.eventAttendeesText.setText(this.currentEvent.getAttendees());
+
         // initialize attendee adapter
-        this.attendeesAdapter = new AttendeesAdapter(this, this.attendeeList, new BtnClickListener() {
-            /**
-             * Method that handles when a button is clicked on an event item.
-             * @param position the position of the event
-             * @param action the desired action of the mouse click
-             */
-            @Override
-            public void onBtnClick(int position, String action) {
-                System.out.println("position");
-            }
-        });
+        this.attendeesAdapter = new AttendeesAdapter(this,
+                                                    this.attendeeListPage);
+        this.attendeeListView.setAdapter(attendeesAdapter);
 
         this.loadAttendees(ATTEND);
     }
@@ -99,7 +102,18 @@ public class ViewEventActivity extends AppCompatActivity {
     }
 
     private void loadAttendees(Status status) {
-        return;
+        this.attendeeListPage.clear();
+        System.out.println("Analayzing attendees");
+        for (Map.Entry<UUID,Status> entry : this.currentEvent.getAttendeeMap().entrySet()) {
+            UUID currentId = entry.getKey();
+            Status currentStatus = entry.getValue();
+
+            if (currentStatus.equals(status)) {
+                this.attendeeListPage.add(this.userMap.get(currentId));
+            }
+        }
+
+        this.attendeesAdapter.notifyDataSetChanged();
     }
 
 

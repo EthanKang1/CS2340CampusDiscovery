@@ -20,16 +20,11 @@ import java.util.List;
 
 public class AttendeesAdapter extends ArrayAdapter<Attendee>{
 
-    private BtnClickListener mClickListener = null;
     private Context context;
 
-    private final List<String> statuses = Arrays.asList("Will Attend", "Maybe", "Won't Attend", "I'm Your Nemesis");
-    private final List<String> badStatuses = Arrays.asList("Won't Attend", "I'm Your Nemesis");
-
-    public AttendeesAdapter(Context context, List<Attendee> attendees, BtnClickListener listener) {
+    public AttendeesAdapter(Context context, List<Attendee> attendees) {
         super(context, 0, attendees);
         this.context = context;
-        mClickListener = (BtnClickListener) listener;
     }
 
     @Override
@@ -37,18 +32,20 @@ public class AttendeesAdapter extends ArrayAdapter<Attendee>{
         Attendee attendee = getItem(position);
 
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_event, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_attendee, parent, false);
         }
 
+        // UI elements
+        TextView attendeeName = (TextView) convertView.findViewById(R.id.attendeeName);
         Button deleteButton = (Button) convertView.findViewById(R.id.delete);
-        TextView eventName = (TextView) convertView.findViewById(R.id.attendeeName);
-        eventName.setText(attendee.getName());
+
+        // Set default text
+        attendeeName.setText(attendee.getName());
 
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(mClickListener != null)
-                    mClickListener.onBtnClick((Integer) view.getTag(), "delete");
+                System.out.println("GOt attendee click");
             }
         });
         
