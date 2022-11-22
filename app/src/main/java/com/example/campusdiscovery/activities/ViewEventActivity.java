@@ -14,6 +14,7 @@ import com.example.campusdiscovery.adapters.AttendeesAdapter;
 import com.example.campusdiscovery.databinding.ActivityViewEventBinding;
 import com.example.campusdiscovery.interfaces.BtnClickListener;
 import com.example.campusdiscovery.models.Attendee;
+import com.example.campusdiscovery.models.Event;
 import com.example.campusdiscovery.models.Status;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -36,6 +37,7 @@ public class ViewEventActivity extends AppCompatActivity {
     private List<Attendee> attendeeList = new ArrayList<Attendee>();
 
     private Map<String, Integer> eventStatus;
+    private Event currentEvent;
 
     /**
      * Initializes the new activity.
@@ -47,24 +49,14 @@ public class ViewEventActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_event);
 
-        Bundle extras = getIntent().getExtras();
 
-        String eventTitle = extras.getString("eventTitle");
-        String eventDescription = extras.getString("eventDescription");
-        String eventLocation = extras.getString("eventLocation");
-        String eventTime = extras.getString("eventTime");
-        String eventCapacity = extras.getString("eventCapacity");
-        String eventAttendees = extras.getString("eventAttendees");
-        String eventAttendeeMap = extras.getString("eventAttendeeMap");
 
+        // Load arguments
         Gson gson = new Gson();
-        Type eventAttendeeMapType = new TypeToken<Map<UUID, Integer>>() {}.getType();
-        if (eventAttendeeMap == "") {
-            this.eventAttendeeMap = new HashMap<UUID, Integer>();
-        } else {
-            this.eventAttendeeMap = gson.fromJson(eventAttendeeMap, eventAttendeeMapType);
-        }
+        Bundle extras = getIntent().getExtras();
+        this.currentEvent = gson.fromJson(extras.getString("currentEvent"), Event.class);
 
+        // Get UI elements
         TextView eventTitleText = findViewById(R.id.eventTitle);
         TextView eventDescriptionText = findViewById(R.id.eventDescription);
         TextView eventLocationText = findViewById(R.id.eventLocation);
@@ -72,12 +64,13 @@ public class ViewEventActivity extends AppCompatActivity {
         TextView eventCapacityText = findViewById(R.id.eventCapacity);
         TextView eventAttendeesText = findViewById(R.id.eventAttendees);
 
-        eventTitleText.setText(eventTitle);
-        eventDescriptionText.setText(eventDescription);
-        eventLocationText.setText(eventLocation);
-        eventTimeText.setText(eventTime);
-        eventCapacityText.setText(eventCapacity);
-        eventAttendeesText.setText(eventAttendees);
+        // Set default text values
+        eventTitleText.setText(this.currentEvent.getName());
+        eventDescriptionText.setText(this.currentEvent.getDescription());
+        eventLocationText.setText(this.currentEvent.getLocation());
+        eventTimeText.setText(this.currentEvent.getTime());
+        eventCapacityText.setText(this.currentEvent.getCapacity());
+        eventAttendeesText.setText(this.currentEvent.getAttendees());
 
         this.attendeeListView = (ListView) findViewById(R.id.attendeeListView);
 

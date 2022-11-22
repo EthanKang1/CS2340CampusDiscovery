@@ -35,6 +35,8 @@ public class Event {
         this.host = null;
     }
 
+
+    // Getter methods
     public UUID getId() {
         return this.id;
     }
@@ -55,25 +57,33 @@ public class Event {
         return this.time;
     }
 
-//    public int getStatus(String username) {
-//        if (username == null) {
-//            return -1;
-//        }
-//
-//        if (this.RSVPList == null) {
-//            this.RSVPList = "";
-//        }
-//        List<String> RSVPList1 = Arrays.asList(this.RSVPList.split(","));
-//        if ((RSVPList1.contains(username) || RSVPList1.contains("") || username.equals(this.host)) && this.statusMap.get(username) == null) {
-//            this.setStatus(username, DEFAULT_STATUS);
-//            return this.statusMap.get(username);
-//        }
-//        if (this.statusMap.get(username) == null) {
-//            this.setStatus(username, BAD_DEFAULT_STATUS);
-//        }
-//        return this.statusMap.get(username);
-//    }
+    public String getCapacity() {
+        return capacity;
+    }
 
+    // Setter methods
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public void setCapacity(String capacity) {
+        this.capacity = capacity;
+    }
+
+
+    // breaker
     public List<String> getRSVPList() {
         if (this.RSVPList == null) {
             this.RSVPList = "";
@@ -88,9 +98,7 @@ public class Event {
         }
         this.statusMap.put(username, status);
     }
-    public String getCapacity() {
-        return capacity;
-    }
+
 
     public Map<String, Integer> getStatusMap() {
         return statusMap;

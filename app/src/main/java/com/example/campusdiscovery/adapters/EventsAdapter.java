@@ -68,7 +68,7 @@ public class EventsAdapter extends ArrayAdapter<Event>{
         eventDescription.setText(event.getDescription());
         eventTime.setText(event.getTime());
         eventLocation.setText(event.getLocation());
-        eventHost.setText("Hosted by " + event.getHost());
+        eventHost.setText("Hosted by " + event.getHost().getName());
         eventCapacity.setText(event.getCapacity());
         eventAttendees.setText(event.getAttendees());
 
