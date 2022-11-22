@@ -1,10 +1,14 @@
 package com.example.campusdiscovery.activities;
 
 import static com.example.campusdiscovery.models.Status.ATTEND;
+import static com.example.campusdiscovery.models.Status.NO_ATTEND;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,6 +17,7 @@ import com.example.campusdiscovery.R;
 import com.example.campusdiscovery.adapters.AttendeesAdapter;
 import com.example.campusdiscovery.databinding.ActivityViewEventBinding;
 import com.example.campusdiscovery.interfaces.BtnClickListener;
+import com.example.campusdiscovery.interfaces.SpinnerListener;
 import com.example.campusdiscovery.models.Attendee;
 import com.example.campusdiscovery.models.Event;
 import com.example.campusdiscovery.models.Status;
@@ -47,6 +52,7 @@ public class ViewEventActivity extends AppCompatActivity {
     private TextView eventCapacityText;
     private TextView eventAttendeesText;
     private ListView attendeeListView;
+    private Spinner statusFilterSpinner;
 
     // handles types of status
     private List<Attendee> attendeeListPage = new ArrayList<Attendee>();
@@ -76,6 +82,7 @@ public class ViewEventActivity extends AppCompatActivity {
         this.eventCapacityText = findViewById(R.id.eventCapacity);
         this.eventAttendeesText = findViewById(R.id.eventAttendees);
         this.attendeeListView = (ListView) findViewById(R.id.attendeeListView);
+        this.statusFilterSpinner = (Spinner) findViewById(R.id.statusFilterSpinner);
 
         // Set default text values
         this.eventTitleText.setText(this.currentEvent.getName());
@@ -89,6 +96,19 @@ public class ViewEventActivity extends AppCompatActivity {
         this.attendeesAdapter = new AttendeesAdapter(this,
                                                     this.attendeeListPage);
         this.attendeeListView.setAdapter(attendeesAdapter);
+
+        // spinner adapter
+        ArrayAdapter<String> statusAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, Status.getStrings());
+        this.statusFilterSpinner.setAdapter(statusAdapter);
+        this.statusFilterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View arg1, int arg2, long arg3) {
+                Status desiredStatus = Status.valueOf(statusFilterSpinner.getItemAtPosition(arg2).toString());
+                loadAttendees(desiredStatus);
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) { }
+        });
 
         this.loadAttendees(ATTEND);
     }
