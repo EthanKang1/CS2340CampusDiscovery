@@ -1,5 +1,7 @@
 package com.example.campusdiscovery.adapters;
 
+import static com.example.campusdiscovery.models.Status.NO_ATTEND;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,9 +13,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.campusdiscovery.interfaces.BtnClickListener;
+import com.example.campusdiscovery.models.Attendee;
 import com.example.campusdiscovery.models.Event;
 import com.example.campusdiscovery.R;
 import com.example.campusdiscovery.interfaces.SpinnerListener;
+import com.example.campusdiscovery.models.Status;
 
 import java.util.Arrays;
 import java.util.List;
@@ -24,17 +28,16 @@ public class EventsAdapter extends ArrayAdapter<Event>{
     private SpinnerListener spinnerListener = null;
     List<Event> events;
     private Context context;
-    private String username;
+    private Attendee currentUser;
 
-    private final List<String> statuses = Arrays.asList("Will Attend", "Maybe", "Won't Attend", "I'm Your Nemesis");
     private final List<String> badStatuses = Arrays.asList("Won't Attend", "I'm Your Nemesis");
 
-    public EventsAdapter(Context context, List<Event> events, BtnClickListener listener, SpinnerListener spinnerListener, String username) {
+    public EventsAdapter(Context context, List<Event> events, BtnClickListener listener, SpinnerListener spinnerListener, Attendee currentUser) {
         super(context, 0, events);
         this.context = context;
         mClickListener = (BtnClickListener) listener;
         this.spinnerListener = (SpinnerListener) spinnerListener;
-        this.username = username;
+        this.currentUser = currentUser;
     }
 
     @Override
@@ -47,7 +50,7 @@ public class EventsAdapter extends ArrayAdapter<Event>{
         }
         Button deleteButton = (Button) convertView.findViewById(R.id.delete);
         Button editButton = (Button) convertView.findViewById(R.id.edit);
-        TextView eventName = (TextView) convertView.findViewById(R.id.eventName);
+        TextView eventName = (TextView) convertView.findViewById(R.id.attendeeName);
         eventName.setText(event.getName());
         TextView eventDescription = (TextView) convertView.findViewById(R.id.eventDescription);
         eventDescription.setText(event.getDescription());
@@ -82,14 +85,26 @@ public class EventsAdapter extends ArrayAdapter<Event>{
         // Status dropdown
         Spinner statusSpinner = (Spinner) convertView.findViewById(R.id.statusSpinner);
 //        statusSpinner.setOnItemSelectedListener(this);
-        ArrayAdapter<String> statusAdapter = new ArrayAdapter<String>(this.context, android.R.layout.simple_spinner_item, this.statuses);
-        ArrayAdapter<String> badStatusAdapter = new ArrayAdapter<String>(this.context, android.R.layout.simple_spinner_item, this.badStatuses);
-        if (event.getRSVPList().contains(this.username) || event.getRSVPList().contains("") || this.username.equals(event.getHost())) {
-            statusSpinner.setAdapter(statusAdapter);
+        ArrayAdapter<String> statusAdapter = new ArrayAdapter<String>(this.context, android.R.layout.simple_spinner_item, Status.getStrings());
+        System.out.println("Setting status ");
+        System.out.println(event.getAttendeeStatus(this.currentUser));
+
+//        ArrayAdapter<String> badStatusAdapter = new ArrayAdapter<String>(this.context, android.R.layout.simple_spinner_item, this.badStatuses);
+//        if (event.getRSVPList().contains(this.username) || event.getRSVPList().contains("") || this.username.equals(event.getHost())) {
+//            statusSpinner.setAdapter(statusAdapter);
+//        } else {
+//            statusSpinner.setAdapter(badStatusAdapter);
+//        }
+        statusSpinner.setAdapter(statusAdapter);
+        Integer currentUserStatusPerEvent = event.getAttendeeStatus(this.currentUser);
+        if (currentUserStatusPerEvent != null) {
+            statusSpinner.setSelection(currentUserStatusPerEvent);
         } else {
-            statusSpinner.setAdapter(badStatusAdapter);
+            statusSpinner.setSelection(statusAdapter.getPosition(NO_ATTEND.toString()));
         }
-        statusSpinner.setSelection(event.getStatus(this.username));
+
+
+//        statusSpinner.setSelection(event.getStatus(this.username));
         statusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View arg1, int arg2, long arg3) {

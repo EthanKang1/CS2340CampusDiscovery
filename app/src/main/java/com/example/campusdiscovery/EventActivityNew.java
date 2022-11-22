@@ -2,6 +2,7 @@ package com.example.campusdiscovery;
 
 import android.os.Bundle;
 
+import com.example.campusdiscovery.models.Attendee;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
@@ -9,12 +10,11 @@ import com.google.android.material.tabs.TabLayout;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 
 import com.example.campusdiscovery.ui.main.SectionsPagerAdapter;
 import com.example.campusdiscovery.databinding.ActivityEventNewBinding;
+import com.google.gson.Gson;
 
 public class EventActivityNew extends AppCompatActivity {
 
@@ -27,7 +27,9 @@ public class EventActivityNew extends AppCompatActivity {
         binding = ActivityEventNewBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
+        Bundle extras = getIntent().getExtras();
+
+        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager(), extras);
         ViewPager viewPager = binding.viewPager;
         viewPager.setAdapter(sectionsPagerAdapter);
         TabLayout tabs = binding.tabs;

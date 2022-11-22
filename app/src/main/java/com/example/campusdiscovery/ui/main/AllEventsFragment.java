@@ -3,6 +3,8 @@ package com.example.campusdiscovery.ui.main;
 import static android.content.Context.MODE_APPEND;
 import static android.content.Context.MODE_PRIVATE;
 
+import static com.example.campusdiscovery.models.Status.NO_ATTEND;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -30,6 +32,7 @@ import com.example.campusdiscovery.activities.ViewEventActivity;
 import com.example.campusdiscovery.adapters.EventsAdapter;
 import com.example.campusdiscovery.interfaces.BtnClickListener;
 import com.example.campusdiscovery.interfaces.SpinnerListener;
+import com.example.campusdiscovery.models.Attendee;
 import com.example.campusdiscovery.models.Event;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -37,6 +40,7 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -47,12 +51,12 @@ public class AllEventsFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String USERNAME = "";
-    private static final String USERTYPE = "";
+    private Attendee currentUser;
 
     // current user information
     private String userName;
     private String userType;
+    private UUID userId;
 
     // pagination variables and elements
     private int noOfBtns;
@@ -84,7 +88,7 @@ public class AllEventsFragment extends Fragment {
                         String RSVPList = data.getStringExtra("RSVPList");
                         int eventPosition = data.getIntExtra("eventPosition", -1);
                         String eventCapacity = data.getStringExtra("eventCapacity");
-                        Event newEvent = new Event(eventTitle, eventDescription, eventLocation, eventTime, eventCapacity, getUserName(), RSVPList);
+                        Event newEvent = new Event(eventTitle, eventDescription, eventLocation, eventTime, eventCapacity, RSVPList);
                         if (action.equals("add")) {
                             addEvent(newEvent);
                         } else if (action.equals("edit")) {
@@ -103,16 +107,12 @@ public class AllEventsFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+     * @param args
      * @return A new instance of fragment AllEventsFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static AllEventsFragment newInstance(String userName, String userType) {
+    public static AllEventsFragment newInstance(Bundle args) {
         AllEventsFragment fragment = new AllEventsFragment();
-        Bundle args = new Bundle();
-        args.putString(USERNAME, userName);
-        args.putString(USERTYPE, userType);
         fragment.setArguments(args);
         return fragment;
     }
@@ -120,12 +120,10 @@ public class AllEventsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            userName = getArguments().getString(USERNAME);
-            userType = getArguments().getString(USERTYPE);
-        }
 
-
+        // parse current user
+        Gson gson = new Gson();
+        this.currentUser = gson.fromJson(getArguments().getString("currentUser"), Attendee.class);
     }
 
     @Override
@@ -166,11 +164,9 @@ public class AllEventsFragment extends Fragment {
              */
             @Override
             public void onItemSelect(int position, int status) {
-                if (eventList.get(position).getRSVPList().contains(userName) || eventList.get(position).getRSVPList().contains("")) {
-                    editEventStatus(position, status);
-                }
+                editEventStatus(position, status);
             }
-        }, getUserName());
+        }, this.currentUser);
 
         this.eventListView.setAdapter(this.eventsAdapter);
         this.eventListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
@@ -221,6 +217,10 @@ public class AllEventsFragment extends Fragment {
         intent.putExtra("eventTime", currentEvent.getTime());
         intent.putExtra("eventPosition", position);
         intent.putExtra("eventCapacity", currentEvent.getCapacity());
+
+        Gson gson = new Gson();
+        intent.putExtra("eventAttendeeMap", gson.toJson(currentEvent.getAttendeeMap()));
+
         eventActivityResultLauncher.launch(intent);
     }
 
@@ -337,6 +337,11 @@ public class AllEventsFragment extends Fragment {
      * @param event the event to add
      */
     private void addEvent(Event event) {
+        // add current user attendee metadata (status and host)
+
+        event.setAttendee(this.currentUser.getId(), 2);
+        event.setHost(this.currentUser);
+
         this.eventList.add(event);
         this.updateEventsPref();
         this.eventsAdapter.notifyDataSetChanged();
@@ -352,7 +357,7 @@ public class AllEventsFragment extends Fragment {
      * @param position the position of the event to remove
      */
     private void deleteEvent(int position) {
-        if (this.eventList.get(position).getHost().equals(this.userName) || this.userType.equals("Organizer")) {
+        if (this.eventList.get(position).getHost().equals(this.currentUser) || this.userType.equals("Organizer")) {
             this.eventList.remove(position);
             this.updateEventsPref();
             this.eventsAdapter.notifyDataSetChanged();
@@ -382,7 +387,7 @@ public class AllEventsFragment extends Fragment {
      */
     private void editEventStatus(int position, int status) {
         if (eventList.get(position).getRSVPList().contains(userName) || eventList.get(position).getRSVPList().contains("")) {
-            this.eventList.get(position).setStatus(getUserName(), status);
+            this.eventList.get(position).setAttendee(this.currentUser.getId(), status);
             this.updateEventsPref();
             System.out.println("status edited");
         }
