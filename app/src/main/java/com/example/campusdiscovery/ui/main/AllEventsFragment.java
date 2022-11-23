@@ -9,7 +9,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.content.Context;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -32,11 +31,11 @@ import com.example.campusdiscovery.activities.EditEventActivity;
 import com.example.campusdiscovery.activities.ViewEventActivity;
 import com.example.campusdiscovery.adapters.EventsAdapter;
 import com.example.campusdiscovery.interfaces.BtnClickListener;
-import com.example.campusdiscovery.interfaces.EventListListener;
 import com.example.campusdiscovery.interfaces.SpinnerListener;
 import com.example.campusdiscovery.models.Attendee;
 import com.example.campusdiscovery.models.Event;
 import com.example.campusdiscovery.models.Status;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -200,7 +199,7 @@ public class AllEventsFragment extends Fragment {
         // loads first event page
         this.loadEventPage();
 
-        Button button = (Button) view.findViewById(R.id.changeUserView);
+        FloatingActionButton button = (FloatingActionButton) view.findViewById(R.id.addEventButton);
         button.setOnClickListener(new View.OnClickListener()
         {
             @Override
