@@ -23,15 +23,15 @@
             android:fontFamily="@font/roboto_bold"
             android:text="@string/upcoming_events"
             android:textSize="30sp"
-            app:layout_constraintBottom_toTopOf="@+id/lvItems"
-            app:layout_constraintEnd_toStartOf="@+id/addEvent"
+            app:layout_constraintBottom_toTopOf="@+id/userEventsView"
+            app:layout_constraintEnd_toStartOf="@+id/changeUserView"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView4"
+            app:layout_constraintTop_toBottomOf="@+id/userEventHeader"
             app:layout_constraintVertical_bias="0.51" />
 
         <TextView
-            android:id="@+id/textView4"
+            android:id="@+id/userEventHeader"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
@@ -47,7 +47,7 @@
             tools:ignore="TextContrastCheck" />
 
         <Button
-            android:id="@+id/addEvent"
+            android:id="@+id/changeUserView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="30dp"
@@ -59,7 +59,7 @@
             tools:ignore="TextContrastCheck" />
 
         <ListView
-            android:id="@+id/lvItems"
+            android:id="@+id/userEventsView"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="30dp"
@@ -71,7 +71,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/addEvent" />
+            app:layout_constraintTop_toBottomOf="@+id/changeUserView" />
 
         <HorizontalScrollView
             android:id="@+id/horizontalView"

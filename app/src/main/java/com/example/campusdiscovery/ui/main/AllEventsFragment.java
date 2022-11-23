@@ -40,7 +40,6 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -142,7 +141,7 @@ public class AllEventsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_all_events, container, false);
 
         // stores visual element variables
-        this.eventListView = (ListView) view.findViewById(R.id.lvItems);
+        this.eventListView = (ListView) view.findViewById(R.id.userEventsView);
         this.paginationButtonLayout = (LinearLayout) view.findViewById(R.id.btnLay);
 
         // loads event data from storage
@@ -199,7 +198,7 @@ public class AllEventsFragment extends Fragment {
         // loads first event page
         this.loadEventPage();
 
-        Button button = (Button) view.findViewById(R.id.addEvent);
+        Button button = (Button) view.findViewById(R.id.changeUserView);
         button.setOnClickListener(new View.OnClickListener()
         {
             @Override
