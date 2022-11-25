@@ -10,7 +10,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.example.campusdiscovery.R;
-import com.example.campusdiscovery.models.Attendee;
+import com.example.campusdiscovery.interfaces.EventListListener;
 
 /**
  * A [FragmentPagerAdapter] that returns a fragment corresponding to
@@ -53,5 +53,12 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     public int getCount() {
         // Show 2 total pages.
         return 2;
+    }
+
+    // method to make fragments refresh data source
+    public void updateFragments() {
+
+
+        return;
     }
 }
