@@ -10,11 +10,15 @@ import android.view.ViewGroup;
 
 import com.example.campusdiscovery.R;
 import com.example.campusdiscovery.adapters.EventsAdapter;
+import com.example.campusdiscovery.fragments.EventListFragment;
 import com.example.campusdiscovery.interfaces.BtnClickListener;
 import com.example.campusdiscovery.interfaces.SpinnerListener;
 import com.example.campusdiscovery.models.Attendee;
 import com.example.campusdiscovery.models.Event;
+import com.example.campusdiscovery.models.EventListViewModel;
 import com.example.campusdiscovery.models.Status;
+import com.example.campusdiscovery.models.UserMapViewModel;
+import com.google.gson.Gson;
 
 import java.util.List;
 
@@ -25,18 +29,16 @@ import java.util.List;
  */
 public class UserEventsFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
     private EventsAdapter eventsAdapter;
 
     private Attendee currentUser;
+    private String currentUserType;
 
-    private List<Event> pageEventList;
+    // data
+    private EventListViewModel eventListViewModel;
+    private UserMapViewModel userMapViewModel;
+
+    private Gson gson = new Gson();
 
     public UserEventsFragment() {
         // Required empty public constructor
@@ -46,8 +48,6 @@ public class UserEventsFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment UserEventsFragment.
      */
     // TODO: Rename and change types and number of parameters
@@ -60,6 +60,11 @@ public class UserEventsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // parse current user
+        this.currentUser = this.gson.fromJson(getArguments().getString("currentUser"), Attendee.class);
+//        this.userMap = this.gson.fromJson(getArguments().getString("userMap"), userMapType);
+        this.currentUserType = getArguments().getString("currentUserType");
     }
 
     @Override
@@ -69,32 +74,14 @@ public class UserEventsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_user_events, container, false);
 
 
-        // initialize event adapter
-        this.eventsAdapter = new EventsAdapter(getActivity(), this.pageEventList, new BtnClickListener() {
-            /**
-             * Method that handles when a button is clicked on an event item.
-             * @param position the position of the event
-             * @param action the desired action of the mouse click
-             */
-            @Override
-            public void onBtnClick(int position, String action) {
-                if (action == "delete") {
-                    deleteEvent(position);
-                } else if (action == "edit") {
-                    openEditEventActivity(position);
-                }
-            }
-        }, new SpinnerListener() {
-            /**
-             * Method that captures an event change on the spinner (toggle) on an event item.
-             * @param position the position of the event
-             * @param status the resulting status clicked
-             */
-            @Override
-            public void onItemSelect(int position, Status status) {
-                editEventStatus(position, status);
-            }
-        }, this.currentUser);
+        Fragment fragment = new EventListFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("currentUser", gson.toJson(this.currentUser));
+        bundle.putString("currentUserType", this.currentUserType);
+        bundle.putBoolean("userView", true);
+        fragment.setArguments(bundle);
+
+        getParentFragmentManager().beginTransaction().replace(R.id.userEventViewFrame, fragment).addToBackStack(null).commit();
 
 
 

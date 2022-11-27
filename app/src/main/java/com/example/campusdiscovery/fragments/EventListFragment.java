@@ -66,6 +66,7 @@ public class EventListFragment extends Fragment {
     private UserMapViewModel userMapViewModel;
     private Attendee currentUser;
     private String currentUserType;
+    private Boolean isUserView;
 
     // Adapters
     private EventsAdapter eventsAdapter;
@@ -133,6 +134,7 @@ public class EventListFragment extends Fragment {
         this.userMapViewModel = new ViewModelProvider(requireActivity()).get(UserMapViewModel.class);
         this.currentUser = this.gson.fromJson(getArguments().getString("currentUser"), Attendee.class);
         this.currentUserType = getArguments().getString("currentUserType");
+        this.isUserView = getArguments().getBoolean("userView");
 
         // Get UI elements
         this.eventListView = (ListView) view.findViewById(R.id.userEventsView);
@@ -266,7 +268,15 @@ public class EventListFragment extends Fragment {
         this.eventListViewModel.getSelectedItem().observe(requireActivity(), item -> {
             for (int i = 0; i < NUM_ITEMS_PAGE; i++) {
                 if ((page * NUM_ITEMS_PAGE) + i < item.size()) {
-                    this.pagedEventList.add(item.get((page * NUM_ITEMS_PAGE) + i));
+                    if (this.isUserView) {
+                        if (item.get((page * NUM_ITEMS_PAGE) + i).getAttendeeStatus(this.currentUser) != null && item.get((page * NUM_ITEMS_PAGE) + i).getAttendeeStatus(this.currentUser) == Status.ATTEND) {
+                            this.pagedEventList.add(item.get((page * NUM_ITEMS_PAGE) + i));
+                        }
+
+                    } else {
+                        this.pagedEventList.add(item.get((page * NUM_ITEMS_PAGE) + i));
+                    }
+
                 }
             }
         });
