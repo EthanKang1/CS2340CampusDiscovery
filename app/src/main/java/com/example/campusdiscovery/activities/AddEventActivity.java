@@ -58,8 +58,6 @@ public class AddEventActivity extends AppCompatActivity {
      * @param view
      */
     public void submitClick(View view) {
-//
-
         Event newEvent = new Event(eventTitleText.getText().toString(),
                 eventDescriptionText.getText().toString(),
                 eventLocationText.getText().toString(),
@@ -70,7 +68,6 @@ public class AddEventActivity extends AppCompatActivity {
 
         Intent data = new Intent();
         data.putExtra("currentEvent", this.gson.toJson(newEvent));
-        data.putExtra("action", "add");
         setResult(RESULT_OK,data);
         finish();
     }
