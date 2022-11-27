@@ -114,11 +114,7 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
         // build arguments
         intent.putExtra("currentUser", currentUserJson);
         intent.putExtra("userMap", userMapJson);
-
-//        // build arguments
-//        intent.putExtra("userName", userName);
-//        intent.putExtra("userType", userType);
-//        intent.putExtra("userId", userId);
+        intent.putExtra("currentUserType", userType);
 
         // launch activity
         startActivity(intent);
