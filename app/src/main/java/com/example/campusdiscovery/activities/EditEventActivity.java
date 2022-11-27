@@ -79,7 +79,6 @@ public class EditEventActivity extends AppCompatActivity {
 
         Intent data = new Intent();
 
-        data.putExtra("action", "edit");
         data.putExtra("currentEvent", this.gson.toJson(currentEvent));
         data.putExtra("eventPosition", this.getPosition());
         setResult(RESULT_OK,data);

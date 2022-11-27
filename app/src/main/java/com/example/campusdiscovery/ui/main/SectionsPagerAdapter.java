@@ -11,6 +11,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.example.campusdiscovery.R;
 import com.example.campusdiscovery.interfaces.EventListListener;
+import com.example.campusdiscovery.interfaces.UpdateListener;
 
 /**
  * A [FragmentPagerAdapter] that returns a fragment corresponding to
@@ -22,6 +23,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     private static final int[] TAB_TITLES = new int[]{R.string.tab_text_1, R.string.tab_text_2};
     private final Context mContext;
     private Bundle extras;
+    private UpdateListener updateListener;
 
     public SectionsPagerAdapter(Context context, FragmentManager fm, Bundle extras) {
         super(fm);
