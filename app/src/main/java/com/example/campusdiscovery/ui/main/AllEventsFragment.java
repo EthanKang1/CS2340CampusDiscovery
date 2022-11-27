@@ -185,6 +185,7 @@ public class AllEventsFragment extends Fragment {
         Bundle bundle = new Bundle();
         bundle.putString("currentUser", gson.toJson(this.currentUser));
         bundle.putString("currentUserType", this.currentUserType);
+        bundle.putBoolean("userView", false);
         fragment.setArguments(bundle);
 
         getParentFragmentManager().beginTransaction().replace(R.id.eventViewFrame, fragment).addToBackStack(null).commit();
