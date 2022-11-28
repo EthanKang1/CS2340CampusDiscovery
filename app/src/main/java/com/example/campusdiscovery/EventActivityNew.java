@@ -33,14 +33,14 @@ import java.util.UUID;
 
 public class EventActivityNew extends AppCompatActivity implements UpdateListener {
 
-    // TODO: make this class handle global changes
-
     private List<Event> eventList = new ArrayList<Event>();
 
     private ActivityEventNewBinding binding;
 
     private EventListViewModel eventListViewModel;
     private UserMapViewModel userMapViewModel;
+
+    private SectionsPagerAdapter sectionsPagerAdapter;
 
     private Gson gson = new Gson();
 
@@ -53,9 +53,9 @@ public class EventActivityNew extends AppCompatActivity implements UpdateListene
 
         Bundle extras = getIntent().getExtras();
 
-        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager(), extras);
+        this.sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager(), extras);
         ViewPager viewPager = binding.viewPager;
-        viewPager.setAdapter(sectionsPagerAdapter);
+        viewPager.setAdapter(this.sectionsPagerAdapter);
         TabLayout tabs = binding.tabs;
         tabs.setupWithViewPager(viewPager);
 
@@ -78,6 +78,9 @@ public class EventActivityNew extends AppCompatActivity implements UpdateListene
             prefsEditor.putString("events", eventListJson);
             prefsEditor.commit();
         });
+
+        System.out.println("inside");
+        this.sectionsPagerAdapter.refreshFragments();
     }
 
     /**

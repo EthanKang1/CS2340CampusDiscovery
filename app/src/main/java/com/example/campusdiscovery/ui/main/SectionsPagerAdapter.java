@@ -17,16 +17,22 @@ import com.example.campusdiscovery.interfaces.UpdateListener;
  * A [FragmentPagerAdapter] that returns a fragment corresponding to
  * one of the sections/tabs/pages.
  */
-public class SectionsPagerAdapter extends FragmentPagerAdapter {
+public class SectionsPagerAdapter extends FragmentPagerAdapter{
 
     @StringRes
     private static final int[] TAB_TITLES = new int[]{R.string.tab_text_1, R.string.tab_text_2};
     private final Context mContext;
     private Bundle extras;
     private UpdateListener updateListener;
+    private FragmentManager fm;
+
+    // instances
+    private Fragment allEventsFragment;
+    private Fragment userEventsFragment;
 
     public SectionsPagerAdapter(Context context, FragmentManager fm, Bundle extras) {
         super(fm);
+        this.fm = fm;
         mContext = context;
         this.extras = extras;
     }
@@ -37,9 +43,11 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         // Return a PlaceholderFragment (defined as a static inner class below).
         switch (position) {
             case 0: // Fragment # 0 - This will show FirstFragment
-                return AllEventsFragment.newInstance(this.extras);
+                allEventsFragment = AllEventsFragment.newInstance(this.extras);
+                return allEventsFragment;
             case 1: // Fragment # 0 - This will show FirstFragment different title
-                return UserEventsFragment.newInstance(this.extras);
+                userEventsFragment = UserEventsFragment.newInstance(this.extras);
+                return userEventsFragment;
             default:
                 return new Fragment();
         }
@@ -58,9 +66,11 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     }
 
     // method to make fragments refresh data source
-    public void updateFragments() {
-
-
-        return;
+    public void refreshFragments() {
+        System.out.println("Adapter freshing");
+        this.fm.beginTransaction().detach(this.allEventsFragment).commit();
+        this.fm.beginTransaction().attach(this.allEventsFragment).commit();
+        this.fm.beginTransaction().detach(this.userEventsFragment).commit();
+        this.fm.beginTransaction().attach(this.userEventsFragment).commit();
     }
 }
