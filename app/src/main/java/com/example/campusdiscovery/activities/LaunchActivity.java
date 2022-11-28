@@ -8,7 +8,7 @@ import android.view.View;
 
 import com.example.campusdiscovery.R;
 
-public class MainActivity extends AppCompatActivity {
+public class LaunchActivity extends AppCompatActivity {
 
     /**
      * Initializes the new activity.

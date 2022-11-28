@@ -12,17 +12,13 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.example.campusdiscovery.EventActivityNew;
 import com.example.campusdiscovery.R;
 import com.example.campusdiscovery.models.Attendee;
-import com.example.campusdiscovery.models.Event;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -55,11 +51,11 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
     }
 
     /**
-     * Performs field validation and launches the EventActivityNew if successful.
+     * Performs field validation and launches the EventActivity if successful.
      * @param view
      */
     public void sendMessage(View view) {
-        Intent intent = new Intent(this, EventActivityNew.class);
+        Intent intent = new Intent(this, EventActivity.class);
 
         EditText userNameText = findViewById(R.id.userName);
         Spinner userTypeSpinner = (Spinner) findViewById(R.id.userType);

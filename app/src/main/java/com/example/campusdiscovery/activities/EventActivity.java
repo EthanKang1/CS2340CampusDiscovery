@@ -1,25 +1,20 @@
-package com.example.campusdiscovery;
+package com.example.campusdiscovery.activities;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
-import com.example.campusdiscovery.interfaces.EventListListener;
 import com.example.campusdiscovery.interfaces.UpdateListener;
 import com.example.campusdiscovery.models.Attendee;
 import com.example.campusdiscovery.models.Event;
 import com.example.campusdiscovery.models.EventListViewModel;
 import com.example.campusdiscovery.models.UserMapViewModel;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.view.View;
-
-import com.example.campusdiscovery.ui.main.SectionsPagerAdapter;
+import com.example.campusdiscovery.adapters.SectionsPagerAdapter;
 import com.example.campusdiscovery.databinding.ActivityEventNewBinding;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -31,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class EventActivityNew extends AppCompatActivity implements UpdateListener {
+public class EventActivity extends AppCompatActivity implements UpdateListener {
 
     private List<Event> eventList = new ArrayList<Event>();
 
