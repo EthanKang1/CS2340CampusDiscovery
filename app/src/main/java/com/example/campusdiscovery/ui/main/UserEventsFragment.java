@@ -87,16 +87,4 @@ public class UserEventsFragment extends Fragment {
 
         return view;
     }
-
-    public void deleteEvent(int position) {
-        // TODO
-    }
-
-    public void openEditEventActivity(int position) {
-        // TODO
-    }
-
-    public void editEventStatus(int position, Status status) {
-        // TODO
-    }
 }
