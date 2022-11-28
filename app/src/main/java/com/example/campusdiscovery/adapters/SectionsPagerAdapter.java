@@ -1,4 +1,4 @@
-package com.example.campusdiscovery.ui.main;
+package com.example.campusdiscovery.adapters;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -10,8 +10,9 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.example.campusdiscovery.R;
-import com.example.campusdiscovery.interfaces.EventListListener;
+import com.example.campusdiscovery.fragments.AllEventsFragment;
 import com.example.campusdiscovery.interfaces.UpdateListener;
+import com.example.campusdiscovery.fragments.UserEventsFragment;
 
 /**
  * A [FragmentPagerAdapter] that returns a fragment corresponding to

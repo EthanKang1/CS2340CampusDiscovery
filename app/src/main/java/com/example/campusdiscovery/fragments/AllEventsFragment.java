@@ -1,13 +1,10 @@
-package com.example.campusdiscovery.ui.main;
-
-import static android.content.Context.MODE_PRIVATE;
+package com.example.campusdiscovery.fragments;
 
 import static com.example.campusdiscovery.models.Status.NO_ATTEND;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.activity.result.ActivityResult;
@@ -27,8 +24,6 @@ import android.widget.Switch;
 import com.example.campusdiscovery.R;
 import com.example.campusdiscovery.activities.AddEventActivity;
 import com.example.campusdiscovery.adapters.EventsAdapter;
-import com.example.campusdiscovery.fragments.EventListFragment;
-import com.example.campusdiscovery.fragments.EventMapFragment;
 import com.example.campusdiscovery.interfaces.UpdateListener;
 import com.example.campusdiscovery.models.Attendee;
 import com.example.campusdiscovery.models.Event;

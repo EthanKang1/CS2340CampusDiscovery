@@ -1,4 +1,4 @@
-package com.example.campusdiscovery.ui.main;
+package com.example.campusdiscovery.models;
 
 import androidx.arch.core.util.Function;
 import androidx.lifecycle.LiveData;

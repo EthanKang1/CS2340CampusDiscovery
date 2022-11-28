@@ -1,4 +1,4 @@
-package com.example.campusdiscovery.ui.main;
+package com.example.campusdiscovery.fragments;
 
 import android.os.Bundle;
 
@@ -10,17 +10,10 @@ import android.view.ViewGroup;
 
 import com.example.campusdiscovery.R;
 import com.example.campusdiscovery.adapters.EventsAdapter;
-import com.example.campusdiscovery.fragments.EventListFragment;
-import com.example.campusdiscovery.interfaces.BtnClickListener;
-import com.example.campusdiscovery.interfaces.SpinnerListener;
 import com.example.campusdiscovery.models.Attendee;
-import com.example.campusdiscovery.models.Event;
 import com.example.campusdiscovery.models.EventListViewModel;
-import com.example.campusdiscovery.models.Status;
 import com.example.campusdiscovery.models.UserMapViewModel;
 import com.google.gson.Gson;
-
-import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
