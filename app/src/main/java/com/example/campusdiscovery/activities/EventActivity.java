@@ -21,6 +21,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -105,4 +106,8 @@ public class EventActivity extends AppCompatActivity implements UpdateListener {
             userMapViewModel.selectItem(gson.fromJson(usersPref, userMapType));
         }
     }
+
+
+    //Can also possibly add sort/filter here.
+
 }

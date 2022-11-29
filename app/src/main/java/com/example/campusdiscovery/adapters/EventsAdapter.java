@@ -24,7 +24,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class EventsAdapter extends ArrayAdapter<Event>{
+public class EventsAdapter extends ArrayAdapter<Event> {
 
     private BtnClickListener mClickListener = null;
     private SpinnerListener spinnerListener = null;
@@ -112,5 +112,10 @@ public class EventsAdapter extends ArrayAdapter<Event>{
 
         return convertView;
     }
+
+    public List<Event> getEvents(){
+        return this.events;
+    }
+
 }
 

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.FiltersFragment">
+    tools:context=".fragments.EventListFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -14,56 +14,70 @@
             android:id="@+id/textView4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginStart="108dp"
+            android:layout_marginTop="32dp"
             android:fontFamily="@font/roboto_bold"
-            android:text="Filter Settings"
+            android:text="Select Filter"
             android:textColor="@color/tech_gold"
             android:textSize="30sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/textView17"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:fontFamily="@font/roboto_bold"
-            android:text="Date Order"
-            android:textSize="24sp"
-            app:layout_constraintStart_toStartOf="@+id/textView4"
-            app:layout_constraintTop_toBottomOf="@+id/textView4" />
-
-        <TextView
-            android:id="@+id/textView18"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:fontFamily="@font/roboto_bold"
-            android:text="Location"
-            android:textSize="24sp"
-            app:layout_constraintStart_toStartOf="@+id/textView4"
-            app:layout_constraintTop_toBottomOf="@+id/textView17" />
-
-        <TextView
-            android:id="@+id/textView19"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="29dp"
-            android:fontFamily="@font/roboto_bold"
-            android:text="Host"
-            android:textSize="24sp"
-            app:layout_constraintStart_toStartOf="@+id/textView4"
-            app:layout_constraintTop_toBottomOf="@+id/textView18" />
-
-        <Spinner
-            android:id="@+id/spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="50dp"
-            app:layout_constraintBottom_toBottomOf="@+id/textView17"
+        <LinearLayout
+            android:layout_width="388dp"
+            android:layout_height="776dp"
+            android:layout_marginTop="24dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/textView17"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView4"
+            app:layout_constraintVertical_bias="0.0">
+
+            <CheckBox
+                android:id="@+id/checkBoxCapacity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Capacity (Smallest to Largest)"
+                android:onClick="onCheckboxClicked"/>
+
+            <CheckBox
+                android:id="@+id/checkBoxDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Date (Soonest to Latest)"
+                android:onClick="onCheckboxClicked"/>
+
+            <CheckBox
+                android:id="@+id/checkBoxLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Location (Closest to farthest)"
+                android:onClick="onCheckboxClicked"/>
+
+            <Button
+                android:id="@+id/applyFilter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Apply"
+                android:clickable="true"/>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="189dp"
+            android:layout_height="29dp"
+            android:layout_marginStart="99dp"
+            android:layout_marginTop="72dp"
+            android:layout_marginEnd="123dp"
+            android:layout_marginBottom="790dp"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="Please Select Only One Filter"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

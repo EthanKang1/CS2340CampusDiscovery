@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class Event {
+public class Event implements Comparable<Event>{
     private UUID id;
     private String name;
     private String description;
@@ -140,5 +140,18 @@ public class Event {
 
     public Attendee getHost() {
         return host;
+    }
+
+    //Possible compareTo method to be used to sort the adapter.
+    //Need to be able to sort either event list or event adapter.
+    @Override
+    public int compareTo(Event other) {
+        if (this.getCapacity() > other.getCapacity()){
+            return 1;
+        } else if (this.getCapacity() < other.getCapacity()){
+            return -1;
+        } else {
+            return 0;
+        }
     }
 }
