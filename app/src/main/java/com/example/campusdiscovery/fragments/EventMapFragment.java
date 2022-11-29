@@ -1,6 +1,8 @@
 package com.example.campusdiscovery.fragments;
 
+import android.app.Activity;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,8 +11,9 @@ import androidx.fragment.app.Fragment;
 
 import com.example.campusdiscovery.R;
 
-import org.osmdroid.views.MapView;
+import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
+import org.osmdroid.views.MapView;
 
 
 
@@ -30,10 +33,11 @@ public class EventMapFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         //load/initialize the osmdroid configuration, this can be done
-        Context ctx = getApplicationContext();
-        Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx));
+        Activity act = getActivity();
+        Configuration.getInstance().load(act, PreferenceManager.getDefaultSharedPreferences(act));
 
         //inflate and create the map
+        
 
         setContentView(R.layout.activity_main);
 
