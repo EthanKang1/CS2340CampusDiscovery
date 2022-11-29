@@ -36,13 +36,7 @@ public class EventMapFragment extends Fragment {
         Activity act = getActivity();
         Configuration.getInstance().load(act, PreferenceManager.getDefaultSharedPreferences(act));
 
-        //inflate and create the map
-        
 
-        setContentView(R.layout.activity_main);
-
-        map = (MapView) findViewById(R.id.map);
-        map.setTileSource(TileSourceFactory.MAPNIK);
     }
 
     public void onResume(){
@@ -83,11 +77,15 @@ public class EventMapFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        //set layout
         View view = inflater.inflate(R.layout.fragment_event_map, container, false);
 
 
 
         // Inflate the layout for this fragment
+        //inflate and create the map
+        map = (MapView) getView().findViewById(R.id.map);
+        map.setTileSource(TileSourceFactory.MAPNIK);
         return view;
     }
 }
