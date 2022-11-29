@@ -96,6 +96,7 @@ public class EventsAdapter extends ArrayAdapter<Event>{
         // status spinner
         ArrayAdapter<String> statusAdapter = new ArrayAdapter<String>(this.context, android.R.layout.simple_spinner_item, Status.getStrings());
         statusSpinner.setAdapter(statusAdapter);
+        statusSpinner.setSelection(0, false);
         if (event.getAttendeeStatus(this.currentUser) != null) {
             statusSpinner.setSelection(statusAdapter.getPosition(event.getAttendeeStatus(this.currentUser).toString()));
         } else {
@@ -109,6 +110,7 @@ public class EventsAdapter extends ArrayAdapter<Event>{
             @Override
             public void onNothingSelected(AdapterView<?> arg0) { }
         });
+
 
         return convertView;
     }
