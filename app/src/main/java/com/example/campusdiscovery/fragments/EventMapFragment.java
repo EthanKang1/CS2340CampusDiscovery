@@ -80,8 +80,6 @@ public class EventMapFragment extends Fragment {
         //set layout
         View view = inflater.inflate(R.layout.fragment_event_map, container, false);
 
-
-
         // Inflate the layout for this fragment
         //inflate and create the map
         map = (MapView) getView().findViewById(R.id.map);

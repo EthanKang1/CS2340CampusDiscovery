@@ -7,6 +7,7 @@ android {
     compileSdk 32
 
     defaultConfig {
+        //add 'tools:replace="android:allowBackup"'
         applicationId "com.example.campusdiscovery"
         minSdk 21
         targetSdk 32
