@@ -32,6 +32,10 @@ public class MapActivity extends Activity {
 
         map = (MapView) findViewById(R.id.map);
         map.setTileSource(TileSourceFactory.MAPNIK);
+
+        map.setBuiltInZoomControls(true);
+        map.setMultiTouchControls(true);
+        
     }
 
     public void onResume(){
