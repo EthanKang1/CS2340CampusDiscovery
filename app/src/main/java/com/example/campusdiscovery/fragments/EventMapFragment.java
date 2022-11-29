@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.campusdiscovery.R;
 
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link EventMapFragment#newInstance} factory method to
@@ -19,6 +20,16 @@ public class EventMapFragment extends Fragment {
     public EventMapFragment() {
         // Required empty public constructor
     }
+
+    MapView map = null;
+    @Override public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        //handle permissions first, before map is created. not depicted here
+
+        //load/initialize the osmdroid configuration, this can be done
+        Context ctx = getApplicationContext();
+        Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx));
 
     /**
      * Use this factory method to create a new instance of
