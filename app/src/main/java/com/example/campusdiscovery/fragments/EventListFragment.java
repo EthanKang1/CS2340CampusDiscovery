@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -179,11 +180,6 @@ public class EventListFragment extends Fragment {
                 }
             }
         }, new SpinnerListener() {
-            /**
-             * Method that captures an event change on the spinner (toggle) on an event item.
-             * @param position the position of the event
-             * @param status the resulting status clicked
-             */
             @Override
             public void onItemSelect(int position, Status status) {
                 editEventStatus(position, status);
@@ -310,10 +306,12 @@ public class EventListFragment extends Fragment {
      //     * @param status the current desired status of the event
      //     */
     private void editEventStatus(int position, Status status) {
+        System.out.println("Got status change");
         this.eventListViewModel.getSelectedItem().observe(requireActivity(), item -> {
             if (item.get(position).getRSVPList().contains(this.currentUser.getName()) || item.get(position).getRSVPList().contains("")) {
                 if (item.get(position).getAttendeeStatus(this.currentUser) == null || !item.get(position).getAttendeeStatus(this.currentUser).equals(status)) {
                     item.get(position).setAttendee(this.currentUser.getId(), status);
+                    System.out.println("Modifying position: " + Integer.toString(position));
                     updateListener.notifyUpdate();
                     this.eventsAdapter.notifyDataSetChanged();
                 }
