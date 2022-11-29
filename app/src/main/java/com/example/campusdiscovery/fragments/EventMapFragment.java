@@ -10,6 +10,13 @@ import android.view.ViewGroup;
 
 import com.example.campusdiscovery.R;
 
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
+import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.MapController;
+import org.osmdroid.views.MapView;
+import android.app.Activity;
+import android.os.Bundle;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link EventMapFragment#newInstance} factory method to
@@ -19,6 +26,24 @@ public class EventMapFragment extends Fragment {
 
     public EventMapFragment() {
         // Required empty public constructor
+    }
+
+    public class OsmdroidDemoMap extends Activity {
+        private MapView         mMapView;
+        private MapController   mMapController;
+
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.osm_main);
+            mMapView = (MapView) findViewById(R.id.mapview);
+            mMapView.setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE);
+            mMapView.setBuiltInZoomControls(true);
+            mMapController = (MapController) mMapView.getController();
+            mMapController.setZoom(13);
+            GeoPoint gPt = new GeoPoint(51500000, -150000);
+            mMapController.setCenter(gPt);
+        }
     }
 
     /**
