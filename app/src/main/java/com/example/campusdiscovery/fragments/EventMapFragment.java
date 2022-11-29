@@ -15,7 +15,7 @@ import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.views.MapView;
 
-
+//osmdroid is in the C:\...\GitHub\S1\app\src\main\res
 
 /**
  * A simple {@link Fragment} subclass.
