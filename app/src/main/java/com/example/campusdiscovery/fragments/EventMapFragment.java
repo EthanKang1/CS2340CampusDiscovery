@@ -29,13 +29,12 @@ public class EventMapFragment extends Fragment {
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //handle permissions first, before map is created. not depicted here
-
         //load/initialize the osmdroid configuration, this can be done
         Context ctx = getApplicationContext();
         Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx));
 
         //inflate and create the map
+
         setContentView(R.layout.activity_main);
 
         map = (MapView) findViewById(R.id.map);
