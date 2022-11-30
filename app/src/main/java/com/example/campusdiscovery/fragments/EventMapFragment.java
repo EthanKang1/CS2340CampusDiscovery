@@ -54,6 +54,8 @@ public class EventMapFragment extends Fragment implements LocationListener {
 
     double CULCx = 33.7746527;
     double CULCy = -84.3964040;
+    double SCx = 33.7736952;
+    double SCy = -84.3982591;
 
     public EventMapFragment() {
         // Required empty public constructor
@@ -110,7 +112,15 @@ public class EventMapFragment extends Fragment implements LocationListener {
         GeoPoint CULC = new GeoPoint(CULCx, CULCy);
         culcmark.setPosition(CULC);
         culcmark.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+        //culcmark.setIcon(getResources().getDrawable(R.drawable.loc));
         osm.getOverlays().add(culcmark);
+
+        Marker scmark = new Marker(osm);
+        GeoPoint SC = new GeoPoint(SCx, SCy);
+        scmark.setPosition(SC);
+        scmark.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+        //scmark.setIcon(getResources().getDrawable(R.drawable.loc));
+        osm.getOverlays().add(scmark);
 
         //MyLocationOverlay locOverlay = MyLocationNewOverlay();
         //Bitmap icon = BitmapFactory.decodeResource(getResources(), com.example.campusdiscovery.R.drawable.loc);
