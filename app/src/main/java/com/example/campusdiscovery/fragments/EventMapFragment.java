@@ -51,6 +51,8 @@ public class EventMapFragment extends Fragment implements LocationListener {
     private CompassOverlay compassOverlay;
     private DirectedLocationOverlay locationOverlay;
     private static final int TECH = 1;
+    double lat = 33.7760; //GT coordinates
+    double lon = -84.4016;
 
     public EventMapFragment() {
         // Required empty public constructor
@@ -99,7 +101,7 @@ public class EventMapFragment extends Fragment implements LocationListener {
 
         mc = (MapController) osm.getController();
         mc.setZoom(15);
-        GeoPoint startPoint = new GeoPoint(33.7823, -84.4044);
+        GeoPoint startPoint = new GeoPoint(lat, lon);
         mc.animateTo(startPoint);
 
         //MyLocationOverlay locOverlay = MyLocationNewOverlay();
