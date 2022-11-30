@@ -2,8 +2,6 @@ package com.example.campusdiscovery.fragments;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -104,8 +102,13 @@ public class EventMapFragment extends Fragment implements LocationListener {
         GeoPoint startPoint = new GeoPoint(lat, lon);
         mc.animateTo(startPoint);
 
+        Marker smark = new Marker(osm);
+        smark.setPosition(startPoint);
+        smark.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+        osm.getOverlays().add(smark);
+
         //MyLocationOverlay locOverlay = MyLocationNewOverlay();
-        Bitmap icon = BitmapFactory.decodeResource(getResources(), com.example.campusdiscovery.R.drawable.loc);
+        //Bitmap icon = BitmapFactory.decodeResource(getResources(), com.example.campusdiscovery.R.drawable.loc);
 
         locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
 
