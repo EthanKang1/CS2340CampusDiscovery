@@ -97,8 +97,9 @@ public class EventMapFragment extends Fragment implements LocationListener {
         osm.setBuiltInZoomControls(true);
         osm.setMultiTouchControls(true);
 
+
         mc = (MapController) osm.getController();
-        mc.setZoom(15);
+        mc.setZoom(17);
         GeoPoint startPoint = new GeoPoint(lat, lon);
         mc.animateTo(startPoint);
 
