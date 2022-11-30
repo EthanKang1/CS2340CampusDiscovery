@@ -28,14 +28,13 @@ public class MapActivity extends Activity {
         //note, the load method also sets the HTTP User Agent to your application's package name, abusing osm's tile servers will get you banned based on this string
 
         //inflate and create the map
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.map);
 
         map = (MapView) findViewById(R.id.map);
         map.setTileSource(TileSourceFactory.MAPNIK);
 
         map.setBuiltInZoomControls(true);
         map.setMultiTouchControls(true);
-        
     }
 
     public void onResume(){

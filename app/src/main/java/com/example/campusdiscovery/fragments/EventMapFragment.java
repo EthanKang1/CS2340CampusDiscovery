@@ -36,7 +36,6 @@ public class EventMapFragment extends Fragment {
         Activity act = getActivity();
         Configuration.getInstance().load(act, PreferenceManager.getDefaultSharedPreferences(act));
 
-
     }
 
     public void onResume(){
