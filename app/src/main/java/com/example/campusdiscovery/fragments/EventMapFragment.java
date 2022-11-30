@@ -1,6 +1,9 @@
 package com.example.campusdiscovery.fragments;
 
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -47,6 +50,7 @@ public class EventMapFragment extends Fragment implements LocationListener {
     private LocationManager locationManager;
     private CompassOverlay compassOverlay;
     private DirectedLocationOverlay locationOverlay;
+    private static final int TECH = 1;
 
     public EventMapFragment() {
         // Required empty public constructor
@@ -82,7 +86,10 @@ public class EventMapFragment extends Fragment implements LocationListener {
         //set layout
         view = inflater.inflate(R.layout.fragment_event_map, container, false);
 
+        osm = (MapView) view.findViewById(R.id.map);
+
         //load/initialize the osmdroid configuration, this can be done
+        osm.setUseDataConnection(true);
         Context ctx = getActivity().getApplicationContext();
         Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx));
         MapView osm = view.findViewById(R.id.map);
@@ -92,9 +99,13 @@ public class EventMapFragment extends Fragment implements LocationListener {
 
         mc = (MapController) osm.getController();
         mc.setZoom(15);
+        GeoPoint startPoint = new GeoPoint(33.7816, -84.4080);
+        mc.animateTo(startPoint);
+
+        //MyLocationOverlay locOverlay = MyLocationNewOverlay();
+        Bitmap icon = BitmapFactory.decodeResource(getResources(), com.example.campusdiscovery.R.drawable.loc);
 
         locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 0, this);
 
         // Inflate the layout for this fragment
         //inflate and create the map
@@ -122,29 +133,62 @@ public class EventMapFragment extends Fragment implements LocationListener {
         osm.getOverlays().clear();
         osm.getOverlays().add(marker);
         osm.invalidate();
-        marker.setTitle("Sua Localização");
+        marker.setTitle("Georgia Tech");
+    }
+
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case TECH: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    getActivity().recreate();
+
+                }
+
+            }
+        }
     }
 
     public void onResume(){
         super.onResume();
-        //this will refresh the osmdroid configuration on resuming.
-        //if you make changes to the configuration, use
-        //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        //Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this));
-        map.onResume();
     }
 
     public void onPause(){
         super.onPause();
-        //this will refresh the osmdroid configuration on resuming.
-        //if you make changes to the configuration, use
-        //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        //Configuration.getInstance().save(this, prefs);
-        map.onPause();  //needed for compass
     }
 
     @Override
     public void onLocationChanged(@NonNull Location location) {
+        GeoPoint center = new GeoPoint(location.getLatitude(), location.getLongitude());
+
+        mc.animateTo(center);
+        addMarker(center);
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+
+    }
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        if (locationManager != null){
+            locationManager.removeUpdates(this);
+        }
 
     }
 }
