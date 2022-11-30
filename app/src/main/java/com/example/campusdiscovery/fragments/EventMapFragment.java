@@ -99,7 +99,7 @@ public class EventMapFragment extends Fragment implements LocationListener {
 
         mc = (MapController) osm.getController();
         mc.setZoom(15);
-        GeoPoint startPoint = new GeoPoint(33.7816, -84.4080);
+        GeoPoint startPoint = new GeoPoint(33.7823, -84.4044);
         mc.animateTo(startPoint);
 
         //MyLocationOverlay locOverlay = MyLocationNewOverlay();
