@@ -1,7 +1,9 @@
 package com.example.campusdiscovery.activities;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
 
 import com.example.campusdiscovery.interfaces.UpdateListener;
 import com.example.campusdiscovery.models.Attendee;
@@ -21,6 +23,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -105,4 +108,15 @@ public class EventActivity extends AppCompatActivity implements UpdateListener {
             userMapViewModel.selectItem(gson.fromJson(usersPref, userMapType));
         }
     }
+
+
+    /**
+     * Launches LoginActivity when welcome button is clicked.
+     * @param view
+     */
+    public void sendMessage(View view) {
+        Intent intent = new Intent(this, FilterActivity.class);
+        startActivity(intent);
+    }
+
 }

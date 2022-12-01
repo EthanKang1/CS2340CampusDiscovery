@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class Event {
+public class Event implements Comparable<Event>{
     private UUID id;
     private String name;
     private String description;
@@ -117,6 +117,7 @@ public class Event {
     public Attendee getHost() {
         return host;
     }
+
 
     public int getAttendeeCount() {
         return attendeeCount;

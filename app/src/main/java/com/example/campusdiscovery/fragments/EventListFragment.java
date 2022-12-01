@@ -40,6 +40,7 @@ import com.example.campusdiscovery.models.UserMapViewModel;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -318,4 +319,7 @@ public class EventListFragment extends Fragment {
             }
         });
     }
+
+    //Would write a type of sorting function here in regards to eventlistview and event list.
+
 }
