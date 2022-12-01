@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class Event implements Comparable<Event>{
+public class Event {
     private UUID id;
     private String name;
     private String description;
