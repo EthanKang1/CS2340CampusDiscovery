@@ -14,15 +14,12 @@ public class Event implements Comparable<Event>{
     private String location;
     private String time;
     private String RSVPList;
+    private int attendeeCount;
     private int capacity;
-    private Map<String, Integer> statusMap = new HashMap<String, Integer>();
-    private final int DEFAULT_STATUS = 2;
-    private final int BAD_DEFAULT_STATUS = 0;
-
     private Attendee host;
 
     // development
-    private Map<UUID, Status> attendeeMap = new HashMap<UUID, Status>();
+    private Map<UUID, Status> attendeeMap;
 
     public Event(String name,
                  String description,
@@ -35,9 +32,11 @@ public class Event implements Comparable<Event>{
         this.description = description;
         this.location = location;
         this.time = time;
+        this.attendeeCount = 0;
         this.capacity = capacity;
         this.RSVPList = RSVPList;
         this.host = null;
+        this.attendeeMap = new HashMap<UUID, Status>();
     }
 
 
@@ -97,30 +96,6 @@ public class Event implements Comparable<Event>{
         return RSVPList1;
     }
 
-    public void setStatus(String username, int status) {
-        if (username == null) {
-            return;
-        }
-        this.statusMap.put(username, status);
-    }
-
-
-    public Map<String, Integer> getStatusMap() {
-        return statusMap;
-    }
-
-    public String getAttendees() {
-        int attendees = 0;
-        if (statusMap.size() > 0) {
-            for (String entry : statusMap.keySet()) {
-                if (statusMap.get(entry) == 0) {
-                    attendees++;
-                }
-            }
-        }
-        return Integer.toString(attendees);
-    }
-
     public Map<UUID, Status> getAttendeeMap() {
         return attendeeMap;
     }
@@ -132,6 +107,7 @@ public class Event implements Comparable<Event>{
     public void setAttendee(UUID attendeeId, Status status) {
         this.attendeeMap.put(attendeeId, status);
         System.out.println(this.attendeeMap);
+        this.refreshAttendeeCount();
     }
 
     public void setHost(Attendee attendee) {
@@ -142,16 +118,17 @@ public class Event implements Comparable<Event>{
         return host;
     }
 
-    //Possible compareTo method to be used to sort the adapter.
-    //Need to be able to sort either event list or event adapter.
-    @Override
-    public int compareTo(Event other) {
-        if (this.getCapacity() > other.getCapacity()){
-            return 1;
-        } else if (this.getCapacity() < other.getCapacity()){
-            return -1;
-        } else {
-            return 0;
+
+    public int getAttendeeCount() {
+        return attendeeCount;
+    }
+
+    private void refreshAttendeeCount() {
+        this.attendeeCount = 0;
+        for(Status status : this.getAttendeeMap().values()) {
+            if (status.equals(Status.ATTEND)) {
+                this.attendeeCount++;
+            }
         }
     }
 }
