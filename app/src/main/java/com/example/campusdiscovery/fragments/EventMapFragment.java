@@ -1,6 +1,8 @@
 package com.example.campusdiscovery.fragments;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -12,11 +14,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.campusdiscovery.R;
+import com.example.campusdiscovery.activities.ViewEventActivity;
+import com.example.campusdiscovery.models.Event;
+import com.example.campusdiscovery.models.EventListViewModel;
+import com.example.campusdiscovery.models.UserMapViewModel;
+import com.google.gson.Gson;
 
 import org.osmdroid.config.Configuration;
 import org.osmdroid.events.MapListener;
@@ -28,7 +40,13 @@ import org.osmdroid.views.MapController;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.compass.CompassOverlay;
+import org.osmdroid.views.overlay.infowindow.MarkerInfoWindow;
 import org.osmdroid.views.overlay.mylocation.DirectedLocationOverlay;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 //osmdroid is in the C:\...\GitHub\S1\app\src\main\res
 
@@ -56,6 +74,37 @@ public class EventMapFragment extends Fragment implements LocationListener {
     double CULCy = -84.3964040;
     double SCx = 33.7736952;
     double SCy = -84.3982591;
+
+    private Gson gson = new Gson();
+
+    private EventListViewModel eventListViewModel;
+    private UserMapViewModel userMapViewModel;
+    private Map<Marker, Event> markerList;
+
+    private final ActivityResultLauncher<Intent> eventActivityResultLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        Intent data = result.getData();
+
+                        Event newEvent = gson.fromJson(data.getStringExtra("currentEvent"), Event.class);
+                        String action = data.getStringExtra("action");
+                        String RSVPList = data.getStringExtra("RSVPList");
+                        int eventPosition = data.getIntExtra("eventPosition", -1);
+
+                        eventListViewModel.getSelectedItem().observe(requireActivity(), item -> {
+                            item.set(eventPosition, newEvent);
+//                            updateListener.notifyUpdate();
+//                            eventsAdapter.notifyDataSetChanged();
+//                            loadEventPage();
+                        });
+
+                    }
+                }
+            }
+    );
 
     public EventMapFragment() {
         // Required empty public constructor
@@ -91,6 +140,11 @@ public class EventMapFragment extends Fragment implements LocationListener {
         //set layout
         view = inflater.inflate(R.layout.fragment_event_map, container, false);
 
+        // ethan map stuff
+        this.eventListViewModel = new ViewModelProvider(requireActivity()).get(EventListViewModel.class);
+        this.userMapViewModel = new ViewModelProvider(requireActivity()).get(UserMapViewModel.class);
+        this.markerList = new HashMap<Marker, Event>();
+
         osm = (MapView) view.findViewById(R.id.map);
 
         //load/initialize the osmdroid configuration, this can be done
@@ -108,19 +162,21 @@ public class EventMapFragment extends Fragment implements LocationListener {
         GeoPoint startPoint = new GeoPoint(lat, lon);
         mc.animateTo(startPoint);
 
-        Marker culcmark = new Marker(osm);
-        GeoPoint CULC = new GeoPoint(CULCx, CULCy);
-        culcmark.setPosition(CULC);
-        culcmark.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-        //culcmark.setIcon(getResources().getDrawable(R.drawable.loc));
-        osm.getOverlays().add(culcmark);
+//        Marker culcmark = new Marker(osm);
+//        GeoPoint CULC = new GeoPoint(CULCx, CULCy);
+//        culcmark.setPosition(CULC);
+//        culcmark.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+//        //culcmark.setIcon(getResources().getDrawable(R.drawable.loc));
+//        osm.getOverlays().add(culcmark);
+//
+//        Marker scmark = new Marker(osm);
+//        GeoPoint SC = new GeoPoint(SCx, SCy);
+//        scmark.setPosition(SC);
+//        scmark.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+//        //scmark.setIcon(getResources().getDrawable(R.drawable.loc));
+//        osm.getOverlays().add(scmark);
 
-        Marker scmark = new Marker(osm);
-        GeoPoint SC = new GeoPoint(SCx, SCy);
-        scmark.setPosition(SC);
-        scmark.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-        //scmark.setIcon(getResources().getDrawable(R.drawable.loc));
-        osm.getOverlays().add(scmark);
+        this.updateMarkers();
 
         //MyLocationOverlay locOverlay = MyLocationNewOverlay();
         //Bitmap icon = BitmapFactory.decodeResource(getResources(), com.example.campusdiscovery.R.drawable.loc);
@@ -209,6 +265,53 @@ public class EventMapFragment extends Fragment implements LocationListener {
         super.onDestroy();
         if (locationManager != null){
             locationManager.removeUpdates(this);
+        }
+
+    }
+
+    public void updateMarkers() {
+        this.markerList.clear();
+
+        this.eventListViewModel.getSelectedItem().observe(requireActivity(), item -> {
+            for (Event currentEvent : item) {
+
+
+                String[] coordinates = currentEvent.getLocation().split(",", 2);
+                double coordLat = Double.parseDouble(coordinates[0]);
+                double coordLong = Double.parseDouble(coordinates[1]);
+
+                // create marker
+                Marker currentMarker = new Marker(osm);
+                currentMarker.setPosition(new GeoPoint(coordLat, coordLong));
+                currentMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+                currentMarker.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
+
+                    @Override
+                    public boolean onMarkerClick(Marker arg0, MapView arg1) {
+                        userMapViewModel.getSelectedItem().observe(requireActivity(), item -> {
+                            //Your stuff
+                            // This isn't a great implementation, but it works
+                            Event thisEvent = markerList.get(arg0);
+                            String currentEventJson = gson.toJson(thisEvent);
+                            String userMapJson = gson.toJson(item);
+
+                            Intent intent = new Intent(getActivity(), ViewEventActivity.class);
+                            intent.putExtra("currentEvent", currentEventJson);
+                            intent.putExtra("userMap", userMapJson);
+
+                            eventActivityResultLauncher.launch(intent);
+                        });
+                        return true;
+                    }
+
+                });
+
+                this.markerList.put(currentMarker, currentEvent);
+            }
+        });
+
+        for (Marker currentMarker : this.markerList.keySet()) {
+            osm.getOverlays().add(currentMarker);
         }
 
     }
