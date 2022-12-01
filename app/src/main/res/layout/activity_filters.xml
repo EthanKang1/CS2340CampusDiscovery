@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.EventListFragment">
+    tools:context=".activities.FilterActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -24,43 +24,37 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
-            android:layout_width="388dp"
-            android:layout_height="776dp"
-            android:layout_marginTop="24dp"
+            android:layout_width="317dp"
+            android:layout_height="532dp"
+            android:layout_marginTop="122dp"
+            android:layout_marginEnd="41dp"
+            android:layout_marginBottom="42dp"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView4"
-            app:layout_constraintVertical_bias="0.0">
+            app:layout_constraintTop_toTopOf="parent">
 
             <CheckBox
                 android:id="@+id/checkBoxCapacity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Capacity (Smallest to Largest)"
-                android:onClick="onCheckboxClicked"/>
+                android:onClick="onCheckboxClicked"
+                android:text="Capacity (Smallest to Largest)" />
 
             <CheckBox
                 android:id="@+id/checkBoxDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Date (Soonest to Latest)"
-                android:onClick="onCheckboxClicked"/>
+                android:onClick="onCheckboxClicked"
+                android:text="Date (Soonest to Latest)" />
 
             <CheckBox
                 android:id="@+id/checkBoxLocation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Location (Closest to farthest)"
-                android:onClick="onCheckboxClicked"/>
+                android:onClick="onCheckboxClicked"
+                android:text="Location (Closest to farthest)" />
 
-            <Button
-                android:id="@+id/applyFilter"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Apply"
-                android:clickable="true"/>
         </LinearLayout>
 
         <TextView
@@ -78,6 +72,17 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/button5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="backClick"
+            android:text="Apply"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:ignore="MissingConstraints" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

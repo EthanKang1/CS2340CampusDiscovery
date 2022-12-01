@@ -68,6 +68,7 @@ public class AddEventActivity extends AppCompatActivity {
 
         Intent data = new Intent();
         data.putExtra("currentEvent", this.gson.toJson(newEvent));
+        data.putExtra("action", "add");
         setResult(RESULT_OK,data);
         finish();
     }

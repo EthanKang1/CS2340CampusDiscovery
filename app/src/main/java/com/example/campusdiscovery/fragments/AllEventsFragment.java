@@ -17,12 +17,14 @@ import androidx.lifecycle.ViewModelProvider;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.Switch;
 
 import com.example.campusdiscovery.R;
 import com.example.campusdiscovery.activities.AddEventActivity;
+import com.example.campusdiscovery.activities.FilterActivity;
 import com.example.campusdiscovery.adapters.EventsAdapter;
 import com.example.campusdiscovery.interfaces.UpdateListener;
 import com.example.campusdiscovery.models.Attendee;
@@ -76,6 +78,7 @@ public class AllEventsFragment extends Fragment {
     // UI elements
     private Switch mapViewSwitch;
     private FloatingActionButton floatingAddEventButton;
+    private Button floatingApplyFilterBtn;
 
     // data
     private EventListViewModel eventListViewModel;
@@ -92,19 +95,31 @@ public class AllEventsFragment extends Fragment {
                 public void onActivityResult(ActivityResult result) {
                     if (result.getResultCode() == Activity.RESULT_OK) {
                         Intent data = result.getData();
-
-                        Event newEvent = gson.fromJson(data.getStringExtra("currentEvent"), Event.class);
                         String action = data.getStringExtra("action");
+
+                        if (action.equals("add")) {
+                            Event newEvent = gson.fromJson(data.getStringExtra("currentEvent"), Event.class);
 //                        String RSVPList = data.getStringExtra("RSVPList");
 
-                        newEvent.setAttendee(currentUser.getId(), NO_ATTEND);
-                        newEvent.setHost(currentUser);
+                            newEvent.setAttendee(currentUser.getId(), NO_ATTEND);
+                            newEvent.setHost(currentUser);
 
-                        eventListViewModel.getSelectedItem().observe(requireActivity(), item -> {
-                            item.add(newEvent);
+                            eventListViewModel.getSelectedItem().observe(requireActivity(), item -> {
+                                item.add(newEvent);
+                                updateListener.notifyUpdate();
+                                switchEventsView(new EventListFragment());
+                            });
+                        } else if (action.equals("filter")) {
+                            boolean lmao = data.getBooleanExtra("result", true);
+                            if (lmao == true) {
+                                eventListViewModel.sortCapacityAsc(getActivity());
+                            } else {
+                                eventListViewModel.sortCapacityDesc(getActivity());
+                            }
+
                             updateListener.notifyUpdate();
-                            switchEventsView(new EventListFragment());
-                        });
+                        }
+
                     }
                 }
             }
@@ -140,6 +155,7 @@ public class AllEventsFragment extends Fragment {
         // get UI elements
         this.mapViewSwitch = (Switch) view.findViewById(R.id.mapViewToggle);
         this.floatingAddEventButton = (FloatingActionButton) view.findViewById(R.id.addEventButton);
+        this.floatingApplyFilterBtn = (Button) view.findViewById(R.id.filterButton);
 
         // Load data
         this.eventListViewModel = new ViewModelProvider(requireActivity()).get(EventListViewModel.class);
@@ -160,6 +176,14 @@ public class AllEventsFragment extends Fragment {
             public void onClick(View v)
             {
                 Intent intent = new Intent(getActivity(), AddEventActivity.class);
+                eventActivityResultLauncher.launch(intent);
+            }
+        });
+        this.floatingApplyFilterBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                Intent intent = new Intent(getActivity(), FilterActivity.class);
                 eventActivityResultLauncher.launch(intent);
             }
         });

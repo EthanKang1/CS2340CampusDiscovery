@@ -1,7 +1,9 @@
 package com.example.campusdiscovery.activities;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
 
 import com.example.campusdiscovery.interfaces.UpdateListener;
 import com.example.campusdiscovery.models.Attendee;
@@ -108,6 +110,13 @@ public class EventActivity extends AppCompatActivity implements UpdateListener {
     }
 
 
-    //Can also possibly add sort/filter here.
+    /**
+     * Launches LoginActivity when welcome button is clicked.
+     * @param view
+     */
+    public void sendMessage(View view) {
+        Intent intent = new Intent(this, FilterActivity.class);
+        startActivity(intent);
+    }
 
 }
