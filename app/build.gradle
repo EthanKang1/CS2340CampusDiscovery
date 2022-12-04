@@ -22,6 +22,9 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        debug {
+            testCoverageEnabled = true
+        }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -49,4 +52,8 @@ dependencies {
     implementation 'org.osmdroid:osmdroid-wms:6.1.14'
     implementation 'org.osmdroid:osmdroid-mapsforge:6.1.14'
     implementation 'org.osmdroid:osmdroid-geopackage:6.1.14'
+    androidTestImplementation 'androidx.test:runner:1.4.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+
+
 }

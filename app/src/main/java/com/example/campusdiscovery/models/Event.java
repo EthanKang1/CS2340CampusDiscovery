@@ -96,6 +96,10 @@ public class Event {
         return RSVPList1;
     }
 
+    public void setRSVPList(String RSVPList) {
+        this.RSVPList = RSVPList;
+    }
+
     public Map<UUID, Status> getAttendeeMap() {
         return attendeeMap;
     }
