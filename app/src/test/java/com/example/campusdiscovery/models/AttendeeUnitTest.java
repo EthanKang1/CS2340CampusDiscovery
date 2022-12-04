@@ -11,7 +11,7 @@ import java.util.List;
 public class AttendeeUnitTest {
 
     @Test
-    public void createEvent_ValidInput() {
+    public void createAttendee_ValidInput() {
         String attendee1_name = "attendee1";
         Attendee attendee = new Attendee("attendee1");
 
